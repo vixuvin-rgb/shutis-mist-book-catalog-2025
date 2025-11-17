@@ -183,12 +183,13 @@ body {
 /* ==========================================================
    MOBILE – Bottom Sheet
    ========================================================== */
+/* === Mobile fullscreen panel === */
 .mobile-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: #fdfaf5;              /* Ногоон ханаг бүрэн дарна */
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
@@ -200,35 +201,34 @@ body {
   pointer-events: auto;
 }
 
-/* fullscreen bottom sheet */
-mobile-sheet {
+.mobile-sheet {
+  margin-top: 12px;
   width: 100%;
   max-width: 520px;
-  height: 88vh;                 /* дэлгэцийн ~90%-ийг дүүргэнэ */
+  height: calc(100vh - 24px);        /* Дэлгэцийг бараг дүүргэнэ */
   background: #fdfaf5;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -20px 45px rgba(0,0,0,0.85);
-  padding: 16px 18px 22px;
-  transform: translateY(100%);
-  transition: transform 0.3s ease-out;
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.45);
+  padding: 16px 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
 }
-
 .mobile-sheet.show {
   transform: translateY(0%);
 }
-	  
+
 .mobile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
-
 .mobile-title {
-  font-size: 18px;              /* томруулсан */
+  font-size: 18px;
   font-weight: 700;
 }
 .mobile-back {
@@ -241,12 +241,12 @@ mobile-sheet {
 }
 
 .mobile-cover-wrap {
-  margin: 4px auto 8px;
-  width: 70vw;                  /* дэлгэцийн 70% өргөнтэй зураг */
-  max-width: 320px;
+  margin: 2px auto 6px;
+  width: 70vw;                        /* дэлгэцийн 70% */
+  max-width: 340px;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.5);
   background: #111;
 }
 .mobile-cover-wrap img {
@@ -263,11 +263,12 @@ mobile-sheet {
 
 .mobile-body {
   margin-top: 4px;
-  font-size: 15px;              /* уншигдахуйц том font */
+  font-size: 15px;                    /* уншигдахуйц том үсэг */
   line-height: 1.65;
   overflow: auto;
   white-space: pre-line;
 }
+
 
 /* ==========================================================
    RESPONSIVE GRID
@@ -910,6 +911,7 @@ function openMobileSheet(idx) {
   </script>
 </body>
 </html>
+
 
 
 
