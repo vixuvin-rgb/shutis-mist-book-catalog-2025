@@ -4,36 +4,35 @@
   <meta charset="UTF-8" />
   <title>Шинэ ном – New Arrivals Shelf</title>
   <style>
-	  .mobile-cover-wrap {
-  margin: 6px auto 4px;
-  width: 120px;
-  height: 180px;          /* 3:4 */
-  border-radius: 10px;
+.mobile-cover-wrap {
+  margin: 4px auto 6px;
+  width: 160px;               /* томрууллаа */
+  height: 240px;              /* 3:4 */
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
   background: #111;
 }
 .mobile-cover-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 /* popup-ийг арай дээш, арай намхан болгоё */
 .mobile-sheet {
   width: 100%;
-  max-width: 480px;
-  max-height: 70vh;       /* 80vh байсныг 70vh болголоо */
+  max-width: 500px;
+  height: 90vh;               /* дэлгэцийг 90% дүүргэнэ */
   background: #fdfaf5;
   border-radius: 18px 18px 0 0;
-  box-shadow: 0 -16px 40px rgba(0,0,0,0.85);
-  padding: 10px 16px 16px; /* дээрийн padding-ийг бага зэрэг багасгав */
+  box-shadow: 0 -20px 45px rgba(0,0,0,0.85);
+  padding: 16px 18px;
   transform: translateY(100%);
-  transition: transform 0.28s ease;
+  transition: transform 0.32s ease;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
 }
     * {
       box-sizing: border-box;
@@ -268,9 +267,9 @@
       flex-direction: column;
       gap: 6px;
     }
-    .mobile-sheet.show {
-      transform: translateY(0%);
-    }
+.mobile-sheet.show {
+  transform: translateY(0%);
+}
     .mobile-header {
       display: flex;
       justify-content: space-between;
@@ -941,6 +940,7 @@ function openMobileSheet(idx) {
   </script>
 </body>
 </html>
+
 
 
 
