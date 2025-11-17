@@ -299,31 +299,6 @@ body {
       </div>
     </div>
   </div>
-/* === Том дэлгэц (компьютер) дээр frame-ийг сунгаж, бүх номыг гаргах === */
-@media (min-width: 1024px) {
-  /* Ногоон том хайрцаг өндөр нь автоматаар агшиж/сунана */
-  .frame {
-    width: min(1200px, 100vw - 80px);
-    height: auto;          /* 900px → auto */
-    max-height: none;      /* 100vh хязгаарлалтыг арилгана */
-    aspect-ratio: auto;    /* хэрвээ дээр нь aspect-ratio заасан бол хүчингүй болгоно */
-    overflow: visible;     /* дотроос нь юм тайрахгүй */
-  }
-
-  /* Доторх ханын давхаргыг absolute биш, энгийн байрлалтай болгоно */
-  .wall {
-    position: relative;    /* өмнөх position:absolute; inset:0-г дарна */
-    inset: auto;
-    padding: 40px;         /* өмнөхтэй ижил padding */
-  }
-
-  /* Номнуудыг барьж байгаа layer-ийг бас энгийн байрлалтай болгоно */
-  .books-layer {
-    position: relative;
-    inset: auto;
-    pointer-events: none;
-  }
-}
   <script>
     const books = [
       {
@@ -840,6 +815,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
