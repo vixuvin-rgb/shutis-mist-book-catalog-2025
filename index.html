@@ -25,12 +25,16 @@ body {
 
 /* Рам: W : H = 1 : 1.6 */
 .frame {
-  width: min(900px, 94vw);   /* desktop дээр ~900px, утсан дээр дэлгэцэн дотор */
-  aspect-ratio: 1 / 1.8;     /* үргэлж 1:1.6 харьцаатай */
+  /* Өргөнийг дэлгэцээс хэтрэхгүйгээр авч байна */
+  width: min(900px, 100vw - 16px);
+  /* Өндөр = өргөн × 1.6  (бүх 40 ном багтахын тулд) */
+  aspect-ratio: 1 / 1.6;
+  max-height: calc(100vh - 32px); /* дэлгэцээс гарвал багасгаад тааруулна */
+
   background: #d3e283;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 1.5vh 3.5vh rgba(0,0,0,0.6);
+  box-shadow: 0 26px 70px rgba(0,0,0,0.65);
   position: relative;
 }
 
@@ -50,7 +54,7 @@ body {
 /* Номууд орших талбай = frame-ийн 90% */
 .books-layer {
   position: absolute;
-  inset: 40px 40px 40px 40px;   /* дээд/доод/баруун/зүүн 40px */
+  inset: 10px;       /* дээр, доор, баруун, зүүн бүгд 40px */
   pointer-events: none;
 }
 
@@ -61,11 +65,15 @@ body {
   height: 100%;
   display: grid;
 
-  grid-template-columns: repeat(6, minmax(0, 1fr)); /* 6 багана */
-  gap: 10px 8px;        /* эгнээ хооронд 10px, багана хооронд 8px л зай */
+  /* ЯГ 6 багана – бүх дэлгэц дээр ижил байна */
+  grid-template-columns: repeat(6, 1fr);
+
+  /* Хоорондын зайг хувиар тооцъё (чиний хэлсэн логиктой адил) */
+  column-gap: 2%;   /* багана хооронд */
+  row-gap: 2%;      /* мөр хооронд */
 
   justify-items: center;
-  align-content: start;
+  align-content: center;
   pointer-events: none;
 }
 
@@ -221,25 +229,6 @@ body {
 /* === RESPONSIVE ТАЛ === */
 
 /* Дэлгэц == 900px: рам бага зэрэг багасгаад grid-ийг 5 багана болгоно */
-@media (max-width: 900px) {
-  .frame {
-    width: 96vw;
-  }
-  .books-grid {
-    grid-template-columns: repeat(5, 1fr);
-    row-gap: 4%;
-    column-gap: 3%;
-  }
-}
-
-/* Дэлгэц == 600px: 4 багана, focus-window босоогоор (зураг дээр, info доор) */
-@media (max-width: 600px) {
-  .books-grid {
-    grid-template-columns: repeat(4, 1fr);
-    row-gap: 4.5%;
-    column-gap: 3%;
-  }
-
   .focus-window {
     flex-direction: column;
     width: 92%;
@@ -802,6 +791,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
