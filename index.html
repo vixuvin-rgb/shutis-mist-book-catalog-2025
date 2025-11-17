@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="mn">
 <head>
-  <meta charset="UTF-8" />
-  <title>Шинэ ном – New Arrivals Shelf</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Шинэ ном</title>
   <style>
 * {
   box-sizing: border-box;
@@ -191,8 +192,8 @@ body {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.28s ease;
-  z-index: 50;
+  transition: opacity 0.25s ease;
+  z-index: 40;
 }
 .mobile-backdrop.show {
   opacity: 1;
@@ -200,16 +201,16 @@ body {
 }
 
 /* fullscreen bottom sheet */
-.mobile-sheet {
+mobile-sheet {
   width: 100%;
-  max-width: 100%;
-  height: 90vh;
+  max-width: 520px;
+  height: 88vh;                 /* дэлгэцийн ~90%-ийг дүүргэнэ */
   background: #fdfaf5;
   border-radius: 18px 18px 0 0;
   box-shadow: 0 -20px 45px rgba(0,0,0,0.85);
-  padding: 18px 18px 28px;
+  padding: 16px 18px 22px;
   transform: translateY(100%);
-  transition: transform 0.32s ease;
+  transition: transform 0.3s ease-out;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -218,50 +219,52 @@ body {
 .mobile-sheet.show {
   transform: translateY(0%);
 }
-
+	  
 .mobile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .mobile-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;              /* томруулсан */
+  font-weight: 700;
 }
-
-.mobile-sub {
-  font-size: 12px;
-  color: #6b7280;
-}
-
 .mobile-back {
   border: none;
   border-radius: 999px;
-  padding: 5px 12px;
-  background: #e5e7eb;
+  padding: 4px 12px;
   font-size: 13px;
+  background: #e5e7eb;
+  cursor: pointer;
 }
 
 .mobile-cover-wrap {
-  margin: 6px auto 10px;
-  width: 180px;
-  height: 260px; /* 3:4 */
-  overflow: hidden;
+  margin: 4px auto 8px;
+  width: 70vw;                  /* дэлгэцийн 70% өргөнтэй зураг */
+  max-width: 320px;
   border-radius: 14px;
-  background: #111;
+  overflow: hidden;
   box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+  background: #111;
 }
-
 .mobile-cover-wrap img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
 }
 
-.mobile-body {
+.mobile-sub {
   font-size: 14px;
-  line-height: 1.45;
+  color: #6b7280;
+}
+
+.mobile-body {
+  margin-top: 4px;
+  font-size: 15px;              /* уншигдахуйц том font */
+  line-height: 1.65;
   overflow: auto;
   white-space: pre-line;
 }
@@ -907,6 +910,7 @@ function openMobileSheet(idx) {
   </script>
 </body>
 </html>
+
 
 
 
