@@ -6,269 +6,233 @@
   <title>Шинэ ном – New Arrivals Shelf</title>
 
   <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* Фон, төвлөрүүлэлт */
-body {
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: #d9e6cf;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 3vh 0;
-}
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: #d9e6cf;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3vh 0;
+    }
 
-/* Рам: W : H = 1 : 1.6 */
-.frame {
-  /* Өргөнийг дэлгэцээс хэтрэхгүйгээр авч байна */
-  width: min(900px, 100vw - 16px);
-  /* Өндөр = өргөн × 1.6  (бүх 40 ном багтахын тулд) */
-  aspect-ratio: 1 / 1.6;
-  max-height: calc(100vh - 32px); /* дэлгэцээс гарвал багасгаад тааруулна */
+    /* --- Ногоон рам --- */
+    .frame {
+      width: min(900px, 100vw - 16px);
+      margin: 0 auto;
+      background: #d3e283;
+      border-radius: 24px;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.65);
+      position: relative;
+      overflow: invisible;          /* доод мөрийг тайрахгүй */
+    }
 
-  background: #d3e283;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 26px 70px rgba(0,0,0,0.65);
-  position: relative;
-}
+    .wall {
+      position: relative;
+      padding: 40px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.30), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(255,255,255,0.24), transparent 55%),
+        linear-gradient(to bottom right, rgba(255,255,255,0.16), rgba(0,0,0,0.10));
+    }
 
-/* Ханын фон, дотор padding-ууд нь хувиар */
-.wall {
-  position: absolute;
-  inset: 0;
-  padding: 5%;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.30), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.24), transparent 55%),
-    linear-gradient(to bottom right, rgba(255,255,255,0.16), rgba(0,0,0,0.10));
-  overflow: hidden;
-}
+    .books-layer {
+      position: relative;
+      pointer-events: none;
+    }
 
-/* Номууд байрлах талбай – рамны эргэн тойронд %-иар зайтай */
-/* Номууд орших талбай = frame-ийн 90% */
-.books-layer {
-  position: absolute;
-  inset: 10px;       /* дээр, доор, баруун, зүүн бүгд 40px */
-  pointer-events: none;
-}
+    /* --- 6 × 7 grid (40 ном бүгд багтана) --- */
+    .books-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr)); /* үргэлж 6 багана */
+      column-gap: 2%;    /* багана хооронд */
+      row-gap: 1%;     /* мөр хооронд */
+      justify-items: center;
+      align-content: center;
+      pointer-events: none;
+    }
 
-/* 6 багана, ойрхон grid */
-.books-grid {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
+    .book-thumb {
+      position: relative;
+      width: 100%;
+      padding-top: 133.33%;  /* 3:4 харьцаа */
+      cursor: pointer;
+      pointer-events: auto;
+      transform-origin: center bottom;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
 
-  /* ЯГ 6 багана – бүх дэлгэц дээр ижил байна */
-  grid-template-columns: repeat(6, 1fr);
+    .book-thumb-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.65);
+      background: #111;
+    }
 
-  /* Хоорондын зайг хувиар тооцъё (чиний хэлсэн логиктой адил) */
-  column-gap: 2%;   /* багана хооронд */
-  row-gap: 2%;      /* мөр хооронд */
+    .book-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-  justify-items: center;
-  align-content: center;
-  pointer-events: none;
-}
+    .book-thumb:hover {
+      transform: translateY(-4%) scale(1.06);
+      box-shadow: 0 1.2vh 2.4vh rgba(0,0,0,0.95);
+    }
 
-/* Номын thumbnail (өмнөхөөсөө өөрчлөх шаардлагагүй) */
-.book-thumb {
-  position: relative;
-  width: 100%;
-  padding-top: 133.33%;  /* 3:4 */
-  cursor: pointer;
-  pointer-events: auto;
-  transform-origin: center bottom;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.book-thumb-inner {
-  position: absolute;
-  inset: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.65);
-  background: #111;
-}
-.book-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+    /* --- Popup overlay --- */
+    .focus-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,0.25), transparent 60%),
+        radial-gradient(circle at 90% 100%, rgba(0,0,0,0.65), rgba(0,0,0,0.80));
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 100;
+    }
 
-.book-thumb:hover {
-  transform: translateY(-4%) scale(1.06);
-  box-shadow: 0 1.2vh 2.4vh rgba(0,0,0,0.95);
-}
+    .focus-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-/* === Фокус window (томруулсан ном + info) === */
+    .focus-window {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(900px, 94vw);
+      max-height: 85vh;
+      display: flex;
+      padding: 20px 24px;
+      gap: 18px;
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow:
+        0 30px 70px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(255,255,255,0.9);
+    }
 
-.focus-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(255,255,255,0.25), transparent 60%),
-    radial-gradient(circle at 90% 100%, rgba(0,0,0,0.55), rgba(0,0,0,0.70));
-  backdrop-filter: blur(3px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 20;
-}
+    .focus-book {
+      flex: 0 0 40%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+      transform-origin: center center;
+      transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
+    }
 
-.focus-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
+    .focus-book img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-/* focus-window: рамны өргөний ~90%, өндөр нь ~70% */
-.focus-window {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 90%;
-  height: 90%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  padding: 3% 3.5%;
-  gap: 3%;
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow:
-    0 3vh 7vh rgba(0,0,0,0.85),
-    0 0 0 1px rgba(255,255,255,0.9);
-}
+    .focus-info {
+      flex: 1 1 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 100%;
+    }
 
-/* Зураг: өргөний ~40%, info ~60% эзэлнэ */
-.focus-book {
-  flex: 0 0 40%;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #111;
-  box-shadow: 0 2.5vh 5vh rgba(0,0,0,0.9);
-  transform-origin: center center;
-  transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
-}
+    .focus-title {
+      font-size: clamp(18px, 2.2vh, 22px);
+      font-weight: 700;
+      color: #111827;
+    }
 
-.focus-book img {
-  display: flex;
-  justify-content: center; /* хөндлөн төв */
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+    .focus-sub {
+      font-size: clamp(13px, 1.9vh, 15px);
+      color: #4b5563;
+    }
 
-/* Info тал – үлдсэн 60% */
-.focus-info {
-  flex: 1 1 60%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8vh;
-  max-height: 100%;
-}
+    .focus-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
 
-.focus-title {
-  font-size: clamp(8px, 2.1vh, 9px);
-  font-weight: 700;
-  color: #111827;
-}
+    .meta-pill {
+      font-size: clamp(11px, 1.7vh, 13px);
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #111827;
+    }
 
-.focus-sub {
-  font-size: clamp(5px, 1.7vh, 7px);
-  color: #4b5563;
-}
+    .focus-desc {
+      margin-top: 8px;
+      font-size: clamp(13px, 1.9vh, 15px);
+      line-height: 1.55;
+      color: #111827;
+      overflow: auto;
+      white-space: pre-line;
+    }
 
-.focus-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6vh;
-  margin-top: 0.2vh;
-}
+    .focus-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      border: none;
+      border-radius: 999px;
+      padding: 2px 10px 4px;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: 0 3px 7px rgba(0,0,0,0.25);
+    }
 
-.meta-pill {
-  font-size: clamp(6px, 1.6vh, 6px);
-  padding: 0.4vh 1.4vh;
-  border-radius: 999px;
-  background: #e5e7eb;
-  color: #111827;
-}
+    .focus-close:hover {
+      background: #d1d5db;
+    }
 
-.focus-desc {
-  margin-top: 0.8vh;
-  font-size: clamp(4px, 1.8vh, 5px);
-  line-height: 1.55;
-  color: #111827;
-  overflow: auto;
-  white-space: pre-line;
-}
+    /* --- Mobile popup: зураг дээрээ, текст доороо --- */
+    @media (max-width: 768px) {
+      .wall {
+        padding: 24px;
+      }
 
-/* Хаах X товч */
-.focus-close {
-  position: absolute;
-  top: 1.2vh;
-  right: 1.6vh;
-  border: none;
-  border-radius: 999px;
-  padding: 0.2vh 1.2vh 0.5vh;
-  font-size: 2.2vh;
-  line-height: 1;
-  cursor: pointer;
-  background: #e5e7eb;
-  color: #111827;
-  box-shadow: 0 0.3vh 0.7vh rgba(0,0,0,0.25);
-}
-.focus-close:hover {
-  background: #d1d5db;
-}
+      .books-grid {
+        column-gap: 2%;
+        row-gap: 3%;
+      }
 
-/* === RESPONSIVE ТАЛ === */
+      .focus-window {
+        flex-direction: column;
+        width: 94vw;
+        max-height: 90vh;
+        padding: 16px 18px;
+        gap: 12px;
+      }
 
-/* Дэлгэц == 900px: рам бага зэрэг багасгаад grid-ийг 5 багана болгоно */
-  .focus-window {
-    flex-direction: column;
-    width: 92%;
-    height: 80%;
-  }
+      .focus-book {
+        flex: 0 0 55%;
+        height: 45vh;
+      }
 
-  .focus-book {
-    flex: 0 0 70%;   /* дээд талын 55% – зураг */
-  }
-
-  .focus-info {
-    flex: 1 1 30%;   /* доод талын 45% – текст */
-  }
-}
-    / === Том дэлгэц (компьютер) дээр frame-ийг сунгаж, бүх номыг гаргах === /
-@media (min-width: 1024px) {
-  /* Ногоон том хайрцаг өндөр нь автоматаар агшиж/сунана */
-  .frame {
-    width: min(1200px, 100vw - 80px);
-    height: auto;          /* 900px → auto */
-    max-height: none;      /* 100vh хязгаарлалтыг арилгана */
-    aspect-ratio: auto;    /* хэрвээ дээр нь aspect-ratio заасан бол хүчингүй болгоно */
-    overflow: visible;     /* дотроос нь юм тайрахгүй */
-  }
-
-  /* Доторх ханын давхаргыг absolute биш, энгийн байрлалтай болгоно */
-  .wall {
-    position: relative;    /* өмнөх position:absolute; inset:0-г дарна */
-    inset: auto;
-    padding: 40px;         /* өмнөхтэй ижил padding */
-  }
-
-  /* Номнуудыг барьж байгаа layer-ийг бас энгийн байрлалтай болгоно */
-  .books-layer {
-    position: relative;
-    inset: auto;
-    pointer-events: none;
-  }
-}
+      .focus-info {
+        flex: 1 1 45%;
+      }
+    }
   </style>
 </head>
 
@@ -280,7 +244,7 @@ body {
       </div>
     </div>
 
-    <!-- Фокус цонх -->
+    <!-- Popup -->
     <div class="focus-overlay" id="focusOverlay">
       <div class="focus-window">
         <div class="focus-book" id="focusBook">
@@ -290,8 +254,8 @@ body {
           <div class="focus-title" id="focusTitle"></div>
           <div class="focus-sub" id="focusSub"></div>
           <div class="focus-meta">
-            <span class="meta-pill" id="focusPages" style="display:none;"></span>
-            <span class="meta-pill" id="focusIsbn"  style="display:none;"></span>
+            <span class="meta-pill" id="focusPages"   style="display:none;"></span>
+            <span class="meta-pill" id="focusIsbn"    style="display:none;"></span>
             <span class="meta-pill" id="focusPurpose" style="display:none;"></span>
           </div>
           <div class="focus-desc" id="focusDesc"></div>
@@ -300,6 +264,7 @@ body {
       </div>
     </div>
   </div>
+
   <script>
     const books = [
       {
@@ -311,7 +276,7 @@ body {
         isbn: "99929-82-01-2",
         purpose: "",
         description:
-          "Энэхүү бүтээл нь нүүдэлчид судлал болон  үндэсний  уламжлалт  технологийн судалгаагаар ажилладаг  монгол улсын нэртэй эрдэмтдийн туурвил бүтээл  юм. Монголчуудын дэлхийн соёл иргэншлийн хөгжилд оруулсан түүхэн ач холбогдол бүхий хувь нэмрийн нэгээхэн хэсэг нь мэдлэг мэдлэг оюуны салбарт хамаарна."
+          "Энэхүү бүтээл нь нүүдэлчид судлал болон үндэсний уламжлалт технологийн судалгаагаар ажилладаг монгол улсын нэртэй эрдэмтдийн туурвил бүтээл юм. Монголчуудын дэлхийн соёл иргэншлийн хөгжилд оруулсан түүхэн ач холбогдол бүхий хувь нэмрийн нэгээхэн хэсэг нь мэдлэг оюуны салбарт хамаарна."
       },
       {
         title: "Машин үйлдвэрлэлийн технологи",
@@ -332,7 +297,7 @@ body {
         isbn: "978-9919-24-962-5",
         purpose: "Үндсэн сурах бичиг",
         description:
-          "Эрдмийн зөвлөлөөр номын агуулгыг хэлэлцүүлэн дараах хоёр үндсэн хэсэгтэйгээр батлагдсан. 1-р хэсэгт: хүний хөгжилд холбогдох суурь онол, үзэл баримтлал, ойлголтуудыг агуулсан 8 бүлэг сэдвүүдийг багтаасан. 2-р хэсэгт: Оюутнуудын өөрийгөө  хөгжүүлэхэд чиглэсэн хувь хүний хөгжлийн талаарх 8 бүлэг сэдвүүдийг оруулсан нь сурах бичгийн гол онцлог болно."
+          "Эрдмийн зөвлөлөөр номын агуулгыг хэлэлцүүлэн дараах хоёр үндсэн хэсэгтэйгээр батлагдсан. 1-р хэсэгт: хүний хөгжилд холбогдох суурь онол, үзэл баримтлал, ойлголтуудыг агуулсан 8 бүлэг; 2-р хэсэгт: оюутнуудын өөрийгөө хөгжүүлэхэд чиглэсэн хувь хүний хөгжлийн талаарх 8 бүлгийг оруулсан."
       },
       {
         title: "Автомат удирдлагын онол",
@@ -343,7 +308,7 @@ body {
         isbn: "978-99978-0-956-8",
         purpose: "Их сургуулийн үндсэн сурах бичиг",
         description:
-          "Энэхүү сурах бичигт автомат удирдлагын онолын үндэс, автомат удирдлагын шугаман болон шугаман бус системийг бүрдүүлэгч энгийн элемент, салаануудын динамик шинж чанар, тодорхойломжуудын талаар дэлгэрэнгүй авч үзсэн."
+          "Автомат удирдлагын онолын үндэс, автомат удирдлагын шугаман болон шугаман бус системийг бүрдүүлэгч элемент, салаануудын динамик шинж чанар, тодорхойломжуудын талаар дэлгэрэнгүй авч үзсэн."
       },
       {
         title: "Христиани – лавлах ном (Металл боловсруулалт)",
@@ -393,7 +358,8 @@ body {
         pages: "192",
         isbn: "978-9919-22-708-1",
         purpose: "",
-        description: "Ном 1-д: Слесарын ажил, токарын ажил, дарханы ажил. Ном 2-д: Гагнуурын ажил. Ном 3-д: Шаваас тавих ажил тус тус орсон."
+        description:
+          "Ном 1-д: слесарын ажил, токарын ажил, дарханы ажил. Ном 2-д: гагнуурын ажил. Ном 3-д: шаваас тавих ажил."
       },
       {
         title: "Нийтийн бодлогын шинжилгээний тоон судалгааны арга",
@@ -404,7 +370,7 @@ body {
         isbn: "978-9919-24-980-9",
         purpose: "",
         description:
-          "Энэхүү  ном нь нийтийн бодлогын шинжилгээний тоон  судалгааны  концекц, ангиллыг танилцуулсан удиртгал бүлэг болон тоон  судалгааны  түүвэр, туршилтын  судалгаа, квази туршилтын судалгаа, агууламжийн судалгаа гэсэн үндсэн таван  бүлгээс бүтсэн."
+          "Нийтийн бодлогын шинжилгээний тоон судалгааны концепц, ангиллыг танилцуулсан удиртгал бүлэг болон түүвэр, туршилтын судалгаа, квази туршилтын судалгаа, агууламжийн судалгааны үндсэн бүлгүүдээс бүрдсэн."
       },
       {
         title: "Шинжлэх ухааны танин мэдэхүйн арга судлал",
@@ -425,7 +391,7 @@ body {
         isbn: "978-9919-27-337-8",
         purpose: "",
         description:
-          "Энэ номонд СКД9с, СКД4в серийн илчит тэрэгний ба 16V240ZJD дизелийн бүтэц, түүний хурдны тохируулгын ба туслах систем, бүхээгтэй тэвш ба явах анги, зүтгүүрийн компьютерийн удирдлага, цахилгаан дамжуулга, түүний цахилгаан схемийн ажиллах зарчим, JZ-7 агаарын тоормосны системийн бүтэц, ажиллагаа, тэдний ашиглалтын ба засвар үйлчилгээний заавар зэрэг зүтгүүрийн гол техник технологитой холбоотой асуудлыг багтаасан болно."
+          "СКД9с, СКД4в серийн илчит тэрэг, 16V240ZJD дизелийн бүтэц, хурдны тохируулга, туслах систем, бүхээгтэй тэвш, явах анги, компьютерийн удирдлага, цахилгаан дамжуулга, агаарын тоормосны системийн бүтэц, ашиглалт, засвар үйлчилгээний зааврыг багтаасан."
       },
       {
         title: "Чилхаажавын Авдайгийн амьдрал, ажил, хөдөлмөрийн зам мөр",
@@ -436,7 +402,7 @@ body {
         isbn: "",
         purpose: "",
         description:
-          "Энэхүү бүтээлээс түүний төрж өссөн Ханхөхий нутаг, удам судар, сурган хүмүүжүүлэх ажил, эрдэм судлалын ажлын чиглэлүүд, хүрсэн үр дүн, УИХ-ын гишүүнээр сонгогдон ажиллахдаа УИХ болон Увс аймгийн төв, тойрогтоо хийж гүйцэтгэсэн ажлуудын тухай, мөн боловсрол, шинжлэх ухааны чиглэлээр бичсэн онцлог өгүүллүүд, хүүхэд залуучуудад зориулан туурвисан зарим номныхоо агуулгын талаар тайлбарлаж бичсэн зэрэгтэй танилцах бололцоотой юм."
+          "Ханхөхий нутгийн удам судар, сурган хүмүүжүүлэх болон эрдэм судлалын ажил, УИХ-ын гишүүнээр ажиллах хугацаанд хийсэн бүтээл, боловсрол шинжлэх ухааны чиглэлээр бичсэн өгүүллүүд зэргийг өгүүлсэн."
       },
       {
         title: "Тээврийн салбарын мэдээллийн систем",
@@ -447,7 +413,7 @@ body {
         isbn: "978-9919-27-005-6",
         purpose: "",
         description:
-          "Энэхүү  гарын авлага нь мэдээллийн технологи, тээвэр логистикийн мэргэжлээр суралцагсад, тээвэр логистикийн салбарт ажиллагсад болон сонирхогч бүх хүмүүст зориулан бичигджээ."
+          "Мэдээллийн технологи, тээвэр логистикийн мэргэжилтнүүдэд зориулсан мэдээллийн системийн орчин үеийн чиг хандлага, хэрэглээг танилцуулсан гарын авлага."
       },
       {
         title: "Механик боловсруулалт (Программын удирдлагатай фрезер)",
@@ -458,7 +424,7 @@ body {
         isbn: "978-9919-0-5002-3",
         purpose: "",
         description:
-          "Энэ ном нь мэргэжлийн боловсролын байгууллага, техникийн сургууль, коллеж, их сургуулийн оюутнууд, түүнчлэн CNC фрезерийн суурь машинтай ажилладаг инженер, техникийн ажилтнуудад онолын мэдлэг, практик ур чадварыг хослуулан хүргэх зорилготой."
+          "CNC фрезерийн суурь машинтай ажиллах инженер, техникийн ажилтнууд болон оюутнуудад онол, практикийг хослуулсан гарын авлага."
       },
       {
         title: "Механик боловсруулалт (Гар удирдлагатай токарь, фрезер)",
@@ -469,7 +435,7 @@ body {
         isbn: "978-9919-0-4997-3",
         purpose: "",
         description:
-          "Токарийн болон фрезерийн суурь машинуудын үйл ажиллагаа, зоролтын горимын оновчлол, багажны зохистой хэрэглээ, гадаргуугийн чанар, нарийвчлалыг хангах арга барилуудыг тайлбарласан."
+          "Токарийн болон фрезерийн суурь машины ажиллагаа, зоролтын горимын оновчлол, багаж хэрэгслийн зөв хэрэглээ, гадаргуугийн чанарыг сайжруулах арга барилыг тайлбарласан."
       },
       {
         title: "Механик боловсруулалт (Программын удирдлагатай токарь–2)",
@@ -490,7 +456,7 @@ body {
         isbn: "978-9919-0-5000-9",
         purpose: "",
         description:
-          "Эндээс та токарийн болон фрезерийн суурь машинуудын үйл ажиллагаа, зоролтын горимын оновчлол, багажны зохистой хэрэглээ, гадаргуугийн чанар, нарийвчлалыг хангах дэвшилтэт арга барилуудыг сурна гэдэгт итгэлтэй байна."
+          "Токарийн болон фрезерийн суурь машинуудын үйл ажиллагаа, зоролтын горимын оновчлол, багажны зохистой хэрэглээ, гадаргуугийн чанар, нарийвчлалыг хангах аргуудыг тайлбарласан."
       },
       {
         title: "Цахилгаан хангамж түгээлтийн үндэс – 1",
@@ -501,7 +467,7 @@ body {
         isbn: "978-99978-0-681-9",
         purpose: "",
         description:
-          "Үйлдвэр, хот суурин, хөдөө аж ахуйн цахилгаан хангамжийн ерөнхий болон онцлог асуудлуудыг жишээ бодлогоор баяжуулан тайлбарласан."
+          "Үйлдвэр, хот суурин, хөдөө аж ахуйн цахилгаан хангамжийн ерөнхий болон өвөрмөц асуудлуудыг жишээ бодлоготой хамт тайлбарласан."
       },
       {
         title: "Цахилгаан хангамж түгээлтийн үндэс – 2",
@@ -522,7 +488,7 @@ body {
         isbn: "978-9919-0-4309-4",
         purpose: "",
         description:
-          "Манай улсын хувьд хиймэл оюун ухааны талаар хүмүүсийн ойлголт, мэдээлэл, хэрэглэх байдал харилцан адилгүй, харьцангуй доогуур түвшинд байгаа нь энэ чиглэлд бид дэлхийн хөгжлөөс хоцрогдох эрсдэл дагуулж байна."
+          "Манай улсын хувьд хиймэл оюун ухааны талаарх ойлголт, хэрэглээ харилцан адилгүй, түвшин доогуур байгааг тодотгон, энэ чиглэлээр хоцрогдохгүй байхад дэмжлэг болох зорилготой бүтээл."
       },
       {
         title: "Friend’s – Хамтдаа англи хэлээ сайжруулцгаая – 1",
@@ -553,7 +519,7 @@ body {
         isbn: "",
         purpose: "",
         description:
-          "Сурах бичигт мехатроникийн шинжлэх ухааны суурь ба үндсэн ойлголт, нэршил, томъёолол, тэдгээрийг байгуулах, удирдах арга, хэрэглээг тусгасан."
+          "Мехатроникийн суурь ойлголт, нэршил, томъёолол, модуль, системийн төрлүүд, бүтэц, удирдлага, хэрэглээг тусгасан."
       },
       {
         title: "Тээврийн менежмент",
@@ -564,7 +530,7 @@ body {
         isbn: "978-9919-0-4749-8",
         purpose: "",
         description:
-          "Тээврийн төрлүүдийн уялдаа холбоо, логистикийн шинэ тогтолцоо, тээврийн салбарын эрх зүйн орчин, зардлыг бууруулах арга замыг авч үзсэн."
+          "Тээврийн төрлүүдийн уялдаа холбоо, логистикийн шинэ тогтолцоо, эрх зүйн орчин, тээвэрлэлтийн зардлыг бууруулах арга замыг авч үзсэн."
       },
       {
         title: "Өөрийгөө бүтээ",
@@ -575,7 +541,7 @@ body {
         isbn: "978-9919-9695-2-3",
         purpose: "",
         description:
-          "Монгол хүний хөгжлийн үзүүлэлт, Монгол ухаан, уламжлалыг хувь хүний хөгжилдээ хэрхэн шингээх талаар өгүүлсэн."
+          "Монгол хүний хөгжлийн үзүүлэлтүүдийг тодорхойлж, Монгол ухаан, уламжлалыг хувь хүний хөгжилд хэрхэн шингээх талаар өгүүлсэн."
       },
       {
         title: "Түүхийн жимээр (Дорнод аймаг) – 5",
@@ -606,7 +572,7 @@ body {
         isbn: "978-9919-0-1977-8",
         purpose: "",
         description:
-          "Монгол хэлний багш, ЕБС-ийн сурагч, их дээд сургуулийн оюутан, үндэсний бичгээ дээдлэн суралцагчдад зориулагдсан."
+          "Монгол хэлний багш, ЕБС-ийн сурагч, их дээд сургуулийн оюутан, үндэсний бичгээр суралцагчдад зориулагдсан."
       },
       {
         title: "Зурагтай үлгэрүүд – Хуулан бичиж, уншиж сурах ном",
@@ -647,7 +613,7 @@ body {
         isbn: "978-9919-0-2833-6",
         purpose: "",
         description:
-          "Исламын ертөнцийн тухай Монгол хэл дээр хийсэн ховор судалгааны нэг. Түүхийн эх сурвалжуудыг голдуу турк, англи, орос хэлээр дамжуулан ашигласан."
+          "Исламын ертөнцийн тухай Монгол хэл дээрх ховор судалгааны нэг. Түүхийн эх сурвалжуудыг турк, англи, орос хэлээр дамжуулан ашигласан."
       },
       {
         title: "Замын машин",
@@ -658,7 +624,7 @@ body {
         isbn: "978-9919-0-2600-4",
         purpose: "",
         description:
-          "Замын машины зүтгэх хүч болон ажлын процессын онолын үндэс, иргэний ба үйлдвэрлэлийн барилга, зам байгууламжид ашигладаг машины хийцийн онцлогийг тусгасан."
+          "Замын машины зүтгэх хүч болон ажлын процессын онолын үндэс, зам байгууламжид ашигладаг машины төрөл, хийцийн онцлогийг тусгасан."
       },
       {
         title: "Тоон системийн удирдлага – I, II",
@@ -669,7 +635,7 @@ body {
         isbn: "978-9919-0-2529-8",
         purpose: "",
         description:
-          "Тоон технологид суурилсан цахим, мобайл, ubiquitous систем, хиймэл оюун ухаан, тоон удирдлагын процессын тухай өгүүлсэн."
+          "Тоон технологид суурилсан цахим, мобайл, ubiquitous системүүд болон хиймэл оюун ухаант тоон удирдлагын процессын талаар өгүүлсэн."
       },
       {
         title: "Худалдааны маркетинг",
@@ -691,7 +657,7 @@ body {
         isbn: "978-99978-2-430-1",
         purpose: "",
         description:
-          "Сурах бичигт шугаман огторгуй, шугаман хувиргалтын ухагдахуунуудыг агуулсан үндсэн 5, нэмэлт 2 бүлгийг дасгал бодлоготой нь хамт оруулсан."
+          "Шугаман огторгуй, шугаман хувиргалтын ухагдахуунуудыг агуулсан үндсэн 5, нэмэлт 2 бүлгийг дасгал бодлоготой нь хамт оруулсан."
       },
       {
         title: "Өргөн тээвэрлэх машин",
@@ -723,11 +689,11 @@ body {
         isbn: "",
         purpose: "",
         description:
-          "Хий, шингэний хөтлүүрийн бүтэц, ажиллагаа, ашиглалтын онцлог, CИ системд бодсон гидравлик тооцооны аргачилсан заавар, жишээ бодлогуудыг багтаасан."
+          "Хий, шингэний хөтлүүрийн бүтэц, ажиллагаа, ашиглалтын онцлог, СИ системд бодсон гидравлик тооцооны аргачилсан заавар, жишээ бодлогуудыг багтаасан."
       }
     ];
 
-    const booksGrid   = document.getElementById("booksGrid");
+    const booksGrid    = document.getElementById("booksGrid");
     const focusOverlay = document.getElementById("focusOverlay");
     const focusBook    = document.getElementById("focusBook");
     const focusImg     = document.getElementById("focusImg");
@@ -739,7 +705,7 @@ body {
     const focusDesc    = document.getElementById("focusDesc");
     const focusClose   = document.getElementById("focusClose");
 
-    // Номнуудыг grid дээр үүсгэх
+    // Grid дээр номнуудыг үүсгэх
     books.forEach((book, index) => {
       const thumb = document.createElement("div");
       thumb.className = "book-thumb";
@@ -794,9 +760,9 @@ body {
 
       focusOverlay.classList.add("active");
 
-      // Animation – эхэндээ бага зэрэг жижиг гарч ирээд томорно
+      // Animation
       focusBook.style.transition = "none";
-      focusBook.style.transform  = "translateX(40px) scale(0.78)";
+      focusBook.style.transform  = "translateX(40px) scale(0.8)";
       void focusBook.offsetWidth;
       focusBook.style.transition = "transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1)";
       focusBook.style.transform  = "translateX(0) scale(1)";
@@ -816,19 +782,3 @@ body {
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
