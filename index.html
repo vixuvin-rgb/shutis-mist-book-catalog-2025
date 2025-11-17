@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Шинэ ном – New Arrivals Shelf</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: #d9e6cf;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Гол frame: 900x900 */
+    .frame {
+      width: 900px;
+      height: 900px;
+      max-width: 100vw;
+      max-height: 100vh;
+      background: #d3e283;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.65);
+      position: relative;
+    }
+
+    .wall {
+      position: absolute;
+      inset: 0;
+      padding: 40px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.30), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(255,255,255,0.24), transparent 55%),
+        linear-gradient(to bottom right, rgba(255,255,255,0.16), rgba(0,0,0,0.10));
+      overflow: hidden;
+    }
+
+    /* Номууд байрлах давхарга */
+    .books-layer {
+      position: absolute;
+      inset: 40px;
+      pointer-events: none;
+    }
+
+    .books-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 22px 16px;
+      justify-items: center;
+      align-items: start;
+    }
+
+    .book-thumb {
+      position: relative;
+      width: 92px;
+      padding-top: 133.33%;          /* 3:4 */
+      cursor: pointer;
+      pointer-events: auto;
+      transform-origin: center bottom;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+    }
+
+    .book-thumb-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.85);
+    }
+
+    .book-thumb img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .book-thumb:hover {
+      transform: translateY(-4px) scale(1.06);
+      box-shadow: 0 16px 26px rgba(0,0,0,0.95);
+    }
+
+    /* === Фокус window (desktop + mobile адилхан) === */
+    .focus-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,0.25), transparent 60%),
+        radial-gradient(circle at 90% 100%, rgba(0,0,0,0.55), rgba(0,0,0,0.65));
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 20;
+    }
+
+    .focus-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .focus-window {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 820px;
+      height: 520px;
+      display: flex;
+      padding: 22px 24px;
+      gap: 22px;
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow:
+        0 28px 70px rgba(0,0,0,0.85),
+        0 0 0 1px rgba(255,255,255,0.9);
+    }
+
+    .focus-book {
+      width: 360px;
+      height: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 22px 50px rgba(0,0,0,0.9);
+      transform-origin: center center;
+      transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
+    }
+
+    .focus-book img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .focus-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 100%;
+    }
+
+    .focus-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .focus-sub {
+      font-size: 15px;
+      color: #4b5563;
+    }
+
+    .focus-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .meta-pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .focus-desc {
+      margin-top: 6px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #111827;
+      overflow: auto;
+      white-space: pre-line;
+    }
+
+    .focus-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      border: none;
+      border-radius: 999px;
+      padding: 2px 10px 4px;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    }
+
+    .focus-close:hover {
+      background: #d1d5db;
+    }
+
+    /* Жижиг дэлгэц дээр grid-ээ л жаахан өөрчилнө */
+    @media (max-width: 1000px) {
+      .frame {
+        width: min(900px, 100vw - 16px);
+        height: min(900px, 100vw - 16px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .books-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px 12px;
+      }
+      .book-thumb {
+        width: 78px;
+      }
+      .focus-window {
+        width: calc(100vw - 32px);
+        height: 520px;
+      }
+      .focus-book {
+        width: 46%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .books-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .focus-window {
+        top: 32px;
+        flex-direction: column;
+        height: calc(100vh - 80px);
+      }
+      .focus-book {
+        width: 100%;
+        height: 52%;
+      }
+      .focus-info {
+        height: 48%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="wall">
+      <div class="books-layer">
+        <div class="books-grid" id="booksGrid"></div>
+      </div>
+    </div>
+
+    <!-- Фокус цонх -->
+    <div class="focus-overlay" id="focusOverlay">
+      <div class="focus-window">
+        <div class="focus-book" id="focusBook">
+          <img id="focusImg" src="" alt="">
+        </div>
+        <div class="focus-info">
+          <div class="focus-title" id="focusTitle"></div>
+          <div class="focus-sub" id="focusSub"></div>
+          <div class="focus-meta">
+            <span class="meta-pill" id="focusPages" style="display:none;"></span>
+            <span class="meta-pill" id="focusIsbn"  style="display:none;"></span>
+            <span class="meta-pill" id="focusPurpose" style="display:none;"></span>
+          </div>
+          <div class="focus-desc" id="focusDesc"></div>
+        </div>
+        <button class="focus-close" id="focusClose">×</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const books = [
+      {
+        title: "Монголын нүүдэлчдийн үндэсний уламжлалт технологи, ёс заншил",
+        author: "Авдай Ч. ба бус",
+        year: "2022",
+        cover: "img/book1.jpeg",
+        pages: "478",
+        isbn: "99929-82-01-2",
+        purpose: "",
+        description:
+          "Энэхүү бүтээл нь нүүдэлчид судлал болон  үндэсний  уламжлалт  технологийн судалгаагаар ажилладаг  монгол улсын нэртэй эрдэмтдийн туурвил бүтээл  юм. Монголчуудын дэлхийн соёл иргэншлийн хөгжилд оруулсан түүхэн ач холбогдол бүхий хувь нэмрийн нэгээхэн хэсэг нь мэдлэг мэдлэг оюуны салбарт хамаарна."
+      },
+      {
+        title: "Машин үйлдвэрлэлийн технологи",
+        author: "Оросоо Л.",
+        year: "2022",
+        cover: "img/book2.jpeg",
+        pages: "504",
+        isbn: "978-9919-9900-3-9",
+        purpose: "Үндсэн сурах бичиг",
+        description: ""
+      },
+      {
+        title: "Хүний хөгжил",
+        author: "Авдай Ч. ба бус",
+        year: "2021",
+        cover: "img/book3.jpeg",
+        pages: "472",
+        isbn: "978-9919-24-962-5",
+        purpose: "Үндсэн сурах бичиг",
+        description:
+          "Эрдмийн зөвлөлөөр номын агуулгыг хэлэлцүүлэн дараах хоёр үндсэн хэсэгтэйгээр батлагдсан. 1-р хэсэгт: хүний хөгжилд холбогдох суурь онол, үзэл баримтлал, ойлголтуудыг агуулсан 8 бүлэг сэдвүүдийг багтаасан. 2-р хэсэгт: Оюутнуудын өөрийгөө  хөгжүүлэхэд чиглэсэн хувь хүний хөгжлийн талаарх 8 бүлэг сэдвүүдийг оруулсан нь сурах бичгийн гол онцлог болно."
+      },
+      {
+        title: "Автомат удирдлагын онол",
+        author: "Авдай Ч. ба бус",
+        year: "2021",
+        cover: "img/book4.jpeg",
+        pages: "433",
+        isbn: "978-99978-0-956-8",
+        purpose: "Их сургуулийн үндсэн сурах бичиг",
+        description:
+          "Энэхүү сурах бичигт автомат удирдлагын онолын үндэс, автомат удирдлагын шугаман болон шугаман бус системийг бүрдүүлэгч энгийн элемент, салаануудын динамик шинж чанар, тодорхойломжуудын талаар дэлгэрэнгүй авч үзсэн."
+      },
+      {
+        title: "Христиани – лавлах ном (Металл боловсруулалт)",
+        author: "Орч. Лхагважав Н.",
+        year: "2016",
+        cover: "img/book5.jpeg",
+        pages: "736",
+        isbn: "978-3-86522-822-2",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Хөдөө аж ахуй, барилгын машин механизм судлал",
+        author: "Орч. Лхагважав Н.",
+        year: "2016",
+        cover: "img/book6.jpeg",
+        pages: "827",
+        isbn: "978-3-8085-2007-9",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Ердийн дифференциал тэгшитгэл",
+        author: "Балжинням Ц. ба бус",
+        year: "2020",
+        cover: "img/book7.jpeg",
+        pages: "221",
+        isbn: "978-9919-22-646-6",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Хөдөлмөрийн аюулгүй байдал, эрүүл ахуй",
+        author: "Авдай Ч. ба бус",
+        year: "2022",
+        cover: "img/book8.jpeg",
+        pages: "607",
+        isbn: "978-99929-51-03-6",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Металл боловсруулах ажил I, II, III",
+        author: "Дагва Ж.",
+        year: "2019",
+        cover: "img/book9.jpeg",
+        pages: "192",
+        isbn: "978-9919-22-708-1",
+        purpose: "",
+        description: "Ном 1-д: Слесарын ажил, токарын ажил, дарханы ажил. Ном 2-д: Гагнуурын ажил. Ном 3-д: Шаваас тавих ажил тус тус орсон."
+      },
+      {
+        title: "Нийтийн бодлогын шинжилгээний тоон судалгааны арга",
+        author: "Ууганбаяр Т.",
+        year: "2022",
+        cover: "img/book10.jpeg",
+        pages: "136",
+        isbn: "978-9919-24-980-9",
+        purpose: "",
+        description:
+          "Энэхүү  ном нь нийтийн бодлогын шинжилгээний тоон  судалгааны  концекц, ангиллыг танилцуулсан удиртгал бүлэг болон тоон  судалгааны  түүвэр, туршилтын  судалгаа, квази туршилтын судалгаа, агууламжийн судалгаа гэсэн үндсэн таван  бүлгээс бүтсэн."
+      },
+      {
+        title: "Шинжлэх ухааны танин мэдэхүйн арга судлал",
+        author: "Өлзийхуяг Б., Намсрай Т.",
+        year: "2022",
+        cover: "img/book11.jpeg",
+        pages: "333",
+        isbn: "978-9919-27-655-3",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "СКД9с ба СКД4в серийн илчит тэрэгний ашиглалт, засвар үйлчилгээний технологийн заавар",
+        author: "Орч. Сүхээ Ё. ба бус",
+        year: "2022",
+        cover: "img/book12.jpeg",
+        pages: "911",
+        isbn: "978-9919-27-337-8",
+        purpose: "",
+        description:
+          "Энэ номонд СКД9с, СКД4в серийн илчит тэрэгний ба 16V240ZJD дизелийн бүтэц, түүний хурдны тохируулгын ба туслах систем, бүхээгтэй тэвш ба явах анги, зүтгүүрийн компьютерийн удирдлага, цахилгаан дамжуулга, түүний цахилгаан схемийн ажиллах зарчим, JZ-7 агаарын тоормосны системийн бүтэц, ажиллагаа, тэдний ашиглалтын ба засвар үйлчилгээний заавар зэрэг зүтгүүрийн гол техник технологитой холбоотой асуудлыг багтаасан болно."
+      },
+      {
+        title: "Чилхаажавын Авдайгийн амьдрал, ажил, хөдөлмөрийн зам мөр",
+        author: "Авдай Ч.",
+        year: "2022",
+        cover: "img/book13.jpeg",
+        pages: "334",
+        isbn: "",
+        purpose: "",
+        description:
+          "Энэхүү бүтээлээс түүний төрж өссөн Ханхөхий нутаг, удам судар, сурган хүмүүжүүлэх ажил, эрдэм судлалын ажлын чиглэлүүд, хүрсэн үр дүн, УИХ-ын гишүүнээр сонгогдон ажиллахдаа УИХ болон Увс аймгийн төв, тойрогтоо хийж гүйцэтгэсэн ажлуудын тухай, мөн боловсрол, шинжлэх ухааны чиглэлээр бичсэн онцлог өгүүллүүд, хүүхэд залуучуудад зориулан туурвисан зарим номныхоо агуулгын талаар тайлбарлаж бичсэн зэрэгтэй танилцах бололцоотой юм."
+      },
+      {
+        title: "Тээврийн салбарын мэдээллийн систем",
+        author: "С. Ариунбаяр ба бус",
+        year: "2021",
+        cover: "img/book14.jpeg",
+        pages: "86",
+        isbn: "978-9919-27-005-6",
+        purpose: "",
+        description:
+          "Энэхүү  гарын авлага нь мэдээллийн технологи, тээвэр логистикийн мэргэжлээр суралцагсад, тээвэр логистикийн салбарт ажиллагсад болон сонирхогч бүх хүмүүст зориулан бичигджээ."
+      },
+      {
+        title: "Механик боловсруулалт (Программын удирдлагатай фрезер)",
+        author: "Г. Оюунбат ба бус",
+        year: "2025",
+        cover: "img/book15.jpeg",
+        pages: "73",
+        isbn: "978-9919-0-5002-3",
+        purpose: "",
+        description:
+          "Энэ ном нь мэргэжлийн боловсролын байгууллага, техникийн сургууль, коллеж, их сургуулийн оюутнууд, түүнчлэн CNC фрезерийн суурь машинтай ажилладаг инженер, техникийн ажилтнуудад онолын мэдлэг, практик ур чадварыг хослуулан хүргэх зорилготой."
+      },
+      {
+        title: "Механик боловсруулалт (Гар удирдлагатай токарь, фрезер)",
+        author: "Г. Оюунбат ба бус",
+        year: "2025",
+        cover: "img/book16.jpeg",
+        pages: "88",
+        isbn: "978-9919-0-4997-3",
+        purpose: "",
+        description:
+          "Токарийн болон фрезерийн суурь машинуудын үйл ажиллагаа, зоролтын горимын оновчлол, багажны зохистой хэрэглээ, гадаргуугийн чанар, нарийвчлалыг хангах арга барилуудыг тайлбарласан."
+      },
+      {
+        title: "Механик боловсруулалт (Программын удирдлагатай токарь–2)",
+        author: "Г. Оюунбат ба бус",
+        year: "2025",
+        cover: "img/book17.jpeg",
+        pages: "99",
+        isbn: "978-9919-0-5001-6",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Механик боловсруулалт (Программын удирдлагатай токарь–1)",
+        author: "Г. Оюунбат ба бус",
+        year: "2025",
+        cover: "img/book18.jpeg",
+        pages: "169",
+        isbn: "978-9919-0-5000-9",
+        purpose: "",
+        description:
+          "Эндээс та токарийн болон фрезерийн суурь машинуудын үйл ажиллагаа, зоролтын горимын оновчлол, багажны зохистой хэрэглээ, гадаргуугийн чанар, нарийвчлалыг хангах дэвшилтэт арга барилуудыг сурна гэдэгт итгэлтэй байна."
+      },
+      {
+        title: "Цахилгаан хангамж түгээлтийн үндэс – 1",
+        author: "З. Цэрэндорж, Ц. Эрдэнэтуяа",
+        year: "2023",
+        cover: "img/book19.jpeg",
+        pages: "394",
+        isbn: "978-99978-0-681-9",
+        purpose: "",
+        description:
+          "Үйлдвэр, хот суурин, хөдөө аж ахуйн цахилгаан хангамжийн ерөнхий болон онцлог асуудлуудыг жишээ бодлогоор баяжуулан тайлбарласан."
+      },
+      {
+        title: "Цахилгаан хангамж түгээлтийн үндэс – 2",
+        author: "З. Цэрэндорж, Ц. Эрдэнэтуяа",
+        year: "2022",
+        cover: "img/book20.jpeg",
+        pages: "424",
+        isbn: "978-99978-0-681-9",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Хиймэл оюун ухаан",
+        author: "Б. Мөнххүж, Д. Бадарч",
+        year: "2024",
+        cover: "img/book21.jpeg",
+        pages: "162",
+        isbn: "978-9919-0-4309-4",
+        purpose: "",
+        description:
+          "Манай улсын хувьд хиймэл оюун ухааны талаар хүмүүсийн ойлголт, мэдээлэл, хэрэглэх байдал харилцан адилгүй, харьцангуй доогуур түвшинд байгаа нь энэ чиглэлд бид дэлхийн хөгжлөөс хоцрогдох эрсдэл дагуулж байна."
+      },
+      {
+        title: "Friend’s – Хамтдаа англи хэлээ сайжруулцгаая – 1",
+        author: "Ц. Одончимэг",
+        year: "2024",
+        cover: "img/book22.jpeg",
+        pages: "164",
+        isbn: "978-9919-0-2298-3",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Friend’s – Хамтдаа англи хэлээ сайжруулцгаая – 2",
+        author: "Ц. Одончимэг",
+        year: "2024",
+        cover: "img/book23.jpeg",
+        pages: "204",
+        isbn: "978-9919-0-3382-8",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Мехатроникийн үндэс",
+        author: "Б. Сэрвүүд, Ц. Бат-Эрдэнэ",
+        year: "2025",
+        cover: "img/book24.jpeg",
+        pages: "333",
+        isbn: "",
+        purpose: "",
+        description:
+          "Сурах бичигт мехатроникийн шинжлэх ухааны суурь ба үндсэн ойлголт, нэршил, томъёолол, тэдгээрийг байгуулах, удирдах арга, хэрэглээг тусгасан."
+      },
+      {
+        title: "Тээврийн менежмент",
+        author: "Б. Асралт ба бус",
+        year: "2025",
+        cover: "img/book25.jpeg",
+        pages: "151",
+        isbn: "978-9919-0-4749-8",
+        purpose: "",
+        description:
+          "Тээврийн төрлүүдийн уялдаа холбоо, логистикийн шинэ тогтолцоо, тээврийн салбарын эрх зүйн орчин, зардлыг бууруулах арга замыг авч үзсэн."
+      },
+      {
+        title: "Өөрийгөө бүтээ",
+        author: "Ч. Алимаа",
+        year: "2022",
+        cover: "img/book26.jpeg",
+        pages: "421",
+        isbn: "978-9919-9695-2-3",
+        purpose: "",
+        description:
+          "Монгол хүний хөгжлийн үзүүлэлт, Монгол ухаан, уламжлалыг хувь хүний хөгжилдээ хэрхэн шингээх талаар өгүүлсэн."
+      },
+      {
+        title: "Түүхийн жимээр (Дорнод аймаг) – 5",
+        author: "М. Жавзансүрэн",
+        year: "2023",
+        cover: "img/book27.jpeg",
+        pages: "296",
+        isbn: "978-9919-0-0955-7",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Түүхийн жимээр (Өмнөговь аймаг) – 6",
+        author: "М. Жавзансүрэн",
+        year: "2023",
+        cover: "img/book28.jpeg",
+        pages: "599",
+        isbn: "978-9919-0-1820-7",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Монгол бичгийн зөв бичих дүрэм, арга зүй, хэрэглээ",
+        author: "Чой. Цэдэнбал",
+        year: "2023",
+        cover: "img/book29.jpeg",
+        pages: "392",
+        isbn: "978-9919-0-1977-8",
+        purpose: "",
+        description:
+          "Монгол хэлний багш, ЕБС-ийн сурагч, их дээд сургуулийн оюутан, үндэсний бичгээ дээдлэн суралцагчдад зориулагдсан."
+      },
+      {
+        title: "Зурагтай үлгэрүүд – Хуулан бичиж, уншиж сурах ном",
+        author: "Чой. Цэдэнбал",
+        year: "2019",
+        cover: "img/book30.jpeg",
+        pages: "127",
+        isbn: "978-9919-21-723-5",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Монгол хичээнгүй бичиг заах арга",
+        author: "Чой. Цэдэнбал",
+        year: "2021",
+        cover: "img/book31.jpeg",
+        pages: "192",
+        isbn: "978-9919-25-926-6",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Монгол хичээнгүй бичиг",
+        author: "Чой. Цэдэнбал",
+        year: "2018",
+        cover: "img/book32.jpeg",
+        pages: "280",
+        isbn: "978-999-78-290-09",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Исламын ертөнц ба Монголчууд",
+        author: "А. Энхбат",
+        year: "2024",
+        cover: "img/book33.jpeg",
+        pages: "288",
+        isbn: "978-9919-0-2833-6",
+        purpose: "",
+        description:
+          "Исламын ертөнцийн тухай Монгол хэл дээр хийсэн ховор судалгааны нэг. Түүхийн эх сурвалжуудыг голдуу турк, англи, орос хэлээр дамжуулан ашигласан."
+      },
+      {
+        title: "Замын машин",
+        author: "Х. Чулуунбаатар, Я. Рэнчинванжил",
+        year: "2024",
+        cover: "img/book34.jpeg",
+        pages: "464",
+        isbn: "978-9919-0-2600-4",
+        purpose: "",
+        description:
+          "Замын машины зүтгэх хүч болон ажлын процессын онолын үндэс, иргэний ба үйлдвэрлэлийн барилга, зам байгууламжид ашигладаг машины хийцийн онцлогийг тусгасан."
+      },
+      {
+        title: "Тоон системийн удирдлага – I, II",
+        author: "Б. Сэр-Од, Б. Бат-Эрдэнэ",
+        year: "2024",
+        cover: "img/book35.jpeg",
+        pages: "240",
+        isbn: "978-9919-0-2529-8",
+        purpose: "",
+        description:
+          "Тоон технологид суурилсан цахим, мобайл, ubiquitous систем, хиймэл оюун ухаан, тоон удирдлагын процессын тухай өгүүлсэн."
+      },
+      {
+        title: "Худалдааны маркетинг",
+        author: "Б. Болормаа",
+        year: "2023",
+        cover: "img/book36.jpeg",
+        pages: "303",
+        isbn: "978-9919-0-1779-8",
+        purpose: "",
+        description:
+          "Худалдааны маркетингийн процессын удирдлага, маркетингийн хэрэгслийн боловсруулалт, гүйцэтгэлийн ур чадварыг нэмэгдүүлэхэд чиглэсэн."
+      },
+      {
+        title: "Шугаман алгебр 1",
+        author: "В. Өлзийбаяр ба бус",
+        year: "2019",
+        cover: "img/book37.jpeg",
+        pages: "256",
+        isbn: "978-99978-2-430-1",
+        purpose: "",
+        description:
+          "Сурах бичигт шугаман огторгуй, шугаман хувиргалтын ухагдахуунуудыг агуулсан үндсэн 5, нэмэлт 2 бүлгийг дасгал бодлоготой нь хамт оруулсан."
+      },
+      {
+        title: "Өргөн тээвэрлэх машин",
+        author: "Б. Сэрвүүд",
+        year: "2024",
+        cover: "img/book38.jpeg",
+        pages: "320",
+        isbn: "",
+        purpose: "",
+        description:
+          "Өргөн тээвэрлэх машины уян автоматчилалын комплекс, манипулятор, роботын тухай үндсэн мэдэгдэхүүн, ангилал, хийцийг тайлбарласан."
+      },
+      {
+        title: "Өргөн тээвэрлэх машин",
+        author: "Б. Сэрвүүд",
+        year: "2023",
+        cover: "img/book39.jpeg",
+        pages: "248",
+        isbn: "",
+        purpose: "",
+        description: ""
+      },
+      {
+        title: "Хий шингэний хөтлүүр",
+        author: "Б. Сэрвүүд",
+        year: "2024",
+        cover: "img/book40.jpeg",
+        pages: "280",
+        isbn: "",
+        purpose: "",
+        description:
+          "Хий, шингэний хөтлүүрийн бүтэц, ажиллагаа, ашиглалтын онцлог, CИ системд бодсон гидравлик тооцооны аргачилсан заавар, жишээ бодлогуудыг багтаасан."
+      }
+    ];
+
+    const booksGrid   = document.getElementById("booksGrid");
+    const focusOverlay = document.getElementById("focusOverlay");
+    const focusBook    = document.getElementById("focusBook");
+    const focusImg     = document.getElementById("focusImg");
+    const focusTitle   = document.getElementById("focusTitle");
+    const focusSub     = document.getElementById("focusSub");
+    const focusPages   = document.getElementById("focusPages");
+    const focusIsbn    = document.getElementById("focusIsbn");
+    const focusPurpose = document.getElementById("focusPurpose");
+    const focusDesc    = document.getElementById("focusDesc");
+    const focusClose   = document.getElementById("focusClose");
+
+    // Номнуудыг grid дээр үүсгэх
+    books.forEach((book, index) => {
+      const thumb = document.createElement("div");
+      thumb.className = "book-thumb";
+      thumb.dataset.index = index;
+
+      const inner = document.createElement("div");
+      inner.className = "book-thumb-inner";
+
+      const img = document.createElement("img");
+      img.src = book.cover;
+      img.alt = book.title;
+
+      inner.appendChild(img);
+      thumb.appendChild(inner);
+      booksGrid.appendChild(thumb);
+
+      thumb.addEventListener("click", () => openFocus(index));
+    });
+
+    function openFocus(idx) {
+      const b = books[idx];
+      if (!b) return;
+
+      focusImg.src = b.cover || "";
+      focusImg.alt = b.title || "";
+
+      focusTitle.textContent = b.title || "";
+      focusSub.textContent = [b.author, b.year].filter(Boolean).join(" · ");
+
+      if (b.pages) {
+        focusPages.style.display = "inline-block";
+        focusPages.textContent = "Хуудас: " + b.pages;
+      } else {
+        focusPages.style.display = "none";
+      }
+
+      if (b.isbn) {
+        focusIsbn.style.display = "inline-block";
+        focusIsbn.textContent = "ISBN: " + b.isbn;
+      } else {
+        focusIsbn.style.display = "none";
+      }
+
+      if (b.purpose) {
+        focusPurpose.style.display = "inline-block";
+        focusPurpose.textContent = b.purpose;
+      } else {
+        focusPurpose.style.display = "none";
+      }
+
+      focusDesc.textContent = b.description || "";
+
+      focusOverlay.classList.add("active");
+
+      // Animation – эхэндээ бага зэрэг жижиг гарч ирээд томорно
+      focusBook.style.transition = "none";
+      focusBook.style.transform  = "translateX(40px) scale(0.78)";
+      void focusBook.offsetWidth;
+      focusBook.style.transition = "transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1)";
+      focusBook.style.transform  = "translateX(0) scale(1)";
+    }
+
+    function closeFocus() {
+      focusOverlay.classList.remove("active");
+    }
+
+    focusClose.addEventListener("click", closeFocus);
+    focusOverlay.addEventListener("click", (e) => {
+      if (e.target === focusOverlay) closeFocus();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeFocus();
+    });
+  </script>
+</body>
+</html>
