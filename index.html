@@ -4,313 +4,294 @@
   <meta charset="UTF-8" />
   <title>Шинэ ном – New Arrivals Shelf</title>
   <style>
-.mobile-cover-wrap {
-  margin: 4px auto 6px;
-  width: 160px;               /* томрууллаа */
-  height: 240px;              /* 3:4 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #d9e6cf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* --- FRAME --- */
+.frame {
+  width: 900px;
+  height: 900px;
+  max-width: 100vw;
+  max-height: 100vh;
+  background: #d3e283;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 26px 70px rgba(0,0,0,0.65);
+  position: relative;
+}
+
+/* --- WALL BACKGROUND --- */
+.wall {
+  position: absolute;
+  inset: 0;
+  padding: 40px;
+  background: linear-gradient(to bottom right,
+    rgba(255,255,255,0.18),
+    rgba(0,0,0,0.06)
+  );
+  overflow: hidden;
+}
+
+/* --- Books layer --- */
+.books-layer {
+  position: absolute;
+  inset: 40px;
+  pointer-events: none; /* зөвхөн ном дарагдана */
+}
+
+.books-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px,1fr));
+  gap: 28px 12px;
+  justify-items: center;
+}
+
+/* --- Book Thumbnail --- */
+.book-thumb {
+  position: relative;
+  width: 100%;
+  padding-top: 133.33%; /* 3:4 */
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: center bottom;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.book-thumb-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+}
+
+.book-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-thumb:hover {
+  transform: translateY(-3px) scale(1.07);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.9);
+}
+
+/* ==========================================================
+   DESKTOP FOCUS WINDOW
+   ========================================================== */
+.focus-overlay {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 20;
+}
+.focus-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Popup Window */
+.focus-window {
+  position: absolute;
+  top: 80px;
+  left: 70px;
+  width: 760px;
+  height: 520px;
+  display: flex;
+  padding: 18px 20px;
+  gap: 18px;
+  border-radius: 18px;
+  background: #fdfaf5;
+  box-shadow:
+    0 24px 65px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(255,255,255,0.7);
+}
+
+.focus-book {
+  width: 330px;
+  height: 100%;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
   background: #111;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.85);
 }
+
+.focus-book img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.focus-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.focus-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.focus-sub {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.focus-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #111827;
+  overflow: auto;
+}
+
+/* Close button */
+.focus-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 15px;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   MOBILE – Bottom Sheet
+   ========================================================== */
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+  z-index: 50;
+}
+.mobile-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* fullscreen bottom sheet */
+.mobile-sheet {
+  width: 100%;
+  max-width: 100%;
+  height: 90vh;
+  background: #fdfaf5;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -20px 45px rgba(0,0,0,0.85);
+  padding: 18px 18px 28px;
+  transform: translateY(100%);
+  transition: transform 0.32s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-sheet.show {
+  transform: translateY(0%);
+}
+
+.mobile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mobile-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.mobile-back {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: #e5e7eb;
+  font-size: 13px;
+}
+
+.mobile-cover-wrap {
+  margin: 6px auto 10px;
+  width: 180px;
+  height: 260px; /* 3:4 */
+  overflow: hidden;
+  border-radius: 14px;
+  background: #111;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+}
+
 .mobile-cover-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* popup-ийг арай дээш, арай намхан болгоё */
-.mobile-sheet {
-  width: 100%;
-  max-width: 500px;
-  height: 90vh;               /* дэлгэцийг 90% дүүргэнэ */
-  background: #fdfaf5;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -20px 45px rgba(0,0,0,0.85);
-  padding: 16px 18px;
-  transform: translateY(100%);
-  transition: transform 0.32s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: #d9e6cf;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    /* Гол frame: 900x900 */
-    .frame {
-      width: 900px;
-      height: 900px;
-      max-width: 100vw;
-      max-height: 100vh;
-      background: #d3e283; /* ханын ногоон */
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 26px 70px rgba(0,0,0,0.65);
-      position: relative;
-    }
-
-    .wall {
-      position: absolute;
-      inset: 0;
-      padding: 40px 40px 32px;
-      background:
-        linear-gradient(to bottom right, rgba(255,255,255,0.18), rgba(0,0,0,0.06));
-      overflow: hidden;
-    }
-
-    /* Цагаан 3D тавиурууд (фикс байрлал) */
-    .shelf {
-	 display: none;
-      position: absolute;
-      border-radius: 10px;
-      border: 4px solid #fdfdfd;
-      box-shadow:
-        0 16px 26px rgba(0,0,0,0.35),
-        inset 0 0 0 1px rgba(255,255,255,0.6);
-      background: linear-gradient(to bottom, #ffffff, #f5f5f5);
-    }
-    .s1 { left: 40px;  top: 40px;  width: 260px; height: 120px; }
-    .s2 { left: 330px; top: 50px;  width: 260px; height: 120px; }
-    .s3 { right: 40px; top: 60px; width: 260px; height: 120px; }
-    .s4 { left: 40px;  top: 210px; width: 180px; height: 170px; }
-    .s5 { left: 250px; top: 215px; width: 220px; height: 160px; }
-    .s6 { right: 40px; top: 210px; width: 190px; height: 180px; }
-    .s7 { left: 40px;  top: 420px; width: 300px; height: 150px; }
-    .s8 { left: 370px; top: 410px; width: 260px; height: 140px; }
-    .s9 { right: 40px; top: 430px; width: 220px; height: 160px; }
-    .s10{ left: 260px; top: 610px; width: 340px; height: 160px; }
-
-    /* Номууд – тавиурын дээр таруу байрлана */
-    .books-layer {
-      position: absolute;
-      inset: 40px 40px 260px 40px; /* доод popup-ийн зай */
-      pointer-events: none;
-    }
-
-
-	.books-grid {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); /* 95 → 70 */
-  gap: 48px 12px; /* завсрыг ч бас жаахан багасгалаа */
-  justify-items: center;
+.mobile-body {
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: auto;
+  white-space: pre-line;
 }
 
-    .book-thumb {
-      position: relative;
-      width: 100%;
-      padding-top: 133.33%;  /* 3:4 харьцаа */
-      cursor: pointer;
-      pointer-events: auto;
-      transform-origin: center bottom;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .book-thumb-inner {
-      position: absolute;
-      inset: 0;
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
-      background: #111;
-    }
-    .book-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .book-thumb:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 14px 26px rgba(0,0,0,0.9);
-    }
-
-    /* === Фокус window (click дээр гарч ирэх 3D цонх) === */
-    .focus-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      z-index: 20;
-    }
-    .focus-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .focus-window {
-      position: absolute;
-      top: 80px;
-      left: 70px;
-      width: 760px;
-      height: 520px;
-      display: flex;
-      padding: 18px 20px;
-      gap: 18px;
-      border-radius: 18px;
-      background: #fdfaf5;
-      box-shadow:
-        0 24px 65px rgba(0,0,0,0.75),
-        0 0 0 1px rgba(255,255,255,0.7);
-    }
-
-    .focus-book {
-      width: 330px;
-      height: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.85);
-      background: #111;
-      transform-origin: center center;
-      transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
-    }
-    .focus-book img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .focus-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 100%;
-    }
-    .focus-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #111827;
-    }
-    .focus-sub {
-      font-size: 13px;
-      color: #4b5563;
-    }
-    .focus-meta {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-    .meta-pill {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      color: #111827;
-    }
-    .focus-desc {
-      margin-top: 6px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: #111827;
-      overflow: auto;
-      white-space: pre-line;
-    }
-    .focus-close {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      border: none;
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      background: #e5e7eb;
-    }
-
-    /* === Mobile bottom sheet === */
-    .mobile-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 40;
-    }
-    .mobile-backdrop.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-.mobile-sheet.show {
-  transform: translateY(0%);
+/* ==========================================================
+   RESPONSIVE GRID
+   ========================================================== */
+@media (max-width: 768px) {
+  .frame {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  .books-layer {
+    inset: 30px;
+  }
+  .books-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px 10px;
+  }
+  .focus-overlay {
+    display: none;
+  }
 }
-    .mobile-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .mobile-title {
-      font-size: 15px;
-      font-weight: 600;
-    }
-    .mobile-back {
-      border: none;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 13px;
-      background: #e5e7eb;
-      cursor: pointer;
-    }
-    .mobile-sub {
-      font-size: 12px;
-      color: #6b7280;
-    }
-    .mobile-body {
-      margin-top: 6px;
-      font-size: 13px;
-      line-height: 1.4;
-      overflow: auto;
-      white-space: pre-line;
-    }
-
-    /* === Responsive === */
-    @media (max-width: 768px) {
-      .frame {
-        width: 100vw;
-        height: 100vh;
-        border-radius: 0;
-      }
-      .wall {
-        padding: 18px 16px 14px;
-      }
-.books-layer {
-  position: absolute;
-  inset: 40px;       /* бүх талд 40px – доор сул зай байхгүй болно */
-  pointer-events: none;
+@media (max-width: 480px) {
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
-      .books-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .focus-overlay { display: none; } /* desktop л ажиллана */
-    }
-    @media (max-width: 480px) {
-      .books-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
+
   </style>
 </head>
 <body>
@@ -926,6 +907,7 @@ function openMobileSheet(idx) {
   </script>
 </body>
 </html>
+
 
 
 
