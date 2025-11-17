@@ -50,7 +50,7 @@ body {
 /* Номууд орших талбай = frame-ийн 90% */
 .books-layer {
   position: absolute;
-  inset: 5%;            /* дээр, доор, баруун, зүүнээс 5% */
+  inset: 4% 4% 4%;            /* дээр, доор, баруун, зүүнээс 5% */
   pointer-events: none;
 }
 
@@ -65,11 +65,11 @@ body {
   grid-template-columns: repeat(6, 14%);
 
   /* эгнээний өндрийг 12% гэж тогтоосон (7 × 12 = 84%) */
-  grid-auto-rows: 12%;
+  grid-auto-rows: 10%;
 
   /* завсар: 7 завсар = 16% → ойролцоогоор 2.28% */
   column-gap: 2.3%;
-  row-gap: 2.3%;
+  row-gap: 1.6%;
 
   justify-content: flex-start; /* left-ээс эхлээд байрлуулна */
   align-content: flex-start;
@@ -811,6 +811,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
