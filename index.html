@@ -12,27 +12,26 @@
       padding: 0;
     }
 
-    body {
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: #d9e6cf;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #d9e6cf;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;   /* center биш */
+  justify-content: center;
+  padding: 12px 0;
+}
 
     /* Гол frame: 900x900 */
-    .frame {
-      width: 900px;
-      height: 900px;
-      max-width: 100vw;
-      max-height: 100vh;
-      background: #d3e283;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 26px 70px rgba(0,0,0,0.65);
-      position: relative;
-    }
+.frame {
+  width: min(900px, 100vw - 16px); /* desktop дээр 900px, утсан дээр дэлгэцэнд багттал агшина */
+  aspect-ratio: 1 / 1;            /* үргэлж квадрат байлгах */
+  background: #d3e283;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 26px 70px rgba(0,0,0,0.65);
+  position: relative;
+}
 
     .wall {
       position: absolute;
@@ -802,3 +801,4 @@
   </script>
 </body>
 </html>
+
