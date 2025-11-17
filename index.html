@@ -274,26 +274,35 @@ body {
    RESPONSIVE GRID
    ========================================================== */
 @media (max-width: 768px) {
+  body {
+    align-items: flex-start;            /* дээдээсээ эхэлж байрлана */
+  }
+
   .frame {
     width: 100vw;
-    height: 100vh;
+    height: auto;                       /* ӨНДӨР ХЯЗГААРГҮЙ */
+    max-height: none;
     border-radius: 0;
+    overflow: visible;                  /* доошоо тайрахгүй */
   }
+
+  .wall {
+    position: relative;
+    padding: 18px 16px 24px;
+  }
+
   .books-layer {
-    inset: 30px;
+    position: static;                   /* inset хэрэггүй */
+    inset: auto;
+    pointer-events: none;
   }
+
   .books-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 22px 10px;
+    grid-template-columns: repeat(3, 1fr);  /* 3 багана – арай том ном */
+    gap: 24px 12px;
   }
-  .focus-overlay {
-    display: none;
-  }
-}
-@media (max-width: 480px) {
-  .books-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+
+  .focus-overlay { display: none; }     /* desktop л ажиллана */
 }
 
   </style>
@@ -911,6 +920,7 @@ function openMobileSheet(idx) {
   </script>
 </body>
 </html>
+
 
 
 
