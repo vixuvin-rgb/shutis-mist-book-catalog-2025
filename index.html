@@ -47,30 +47,40 @@ body {
 }
 
 /* Номууд байрлах талбай – рамны эргэн тойронд %-иар зайтай */
+/* Номууд орших талбай = frame-ийн 90% */
 .books-layer {
   position: absolute;
-  inset: 7% 6%;     /* top/bottom 7%, left/right 6% */
+  inset: 5%;            /* дээр, доор, баруун, зүүнээс 5% */
   pointer-events: none;
 }
 
-/* 6 багана × ойролцоогоор 7 мөр */
+/* 6 багана, 7 эгнээний grid – бүгд хувь */
 .books-grid {
   position: relative;
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  row-gap: 3.5%;       /* мөр хоорондын зай – өндрийн хувиар */
-  column-gap: 2.5%;    /* багана хоорондын зай – өргөний хувиар */
-  justify-items: center;
-  align-items: start;
+
+  /* 6 багана: 6 × 14% = 84% */
+  grid-template-columns: repeat(6, 14%);
+
+  /* эгнээний өндрийг 12% гэж тогтоосон (7 × 12 = 84%) */
+  grid-auto-rows: 12%;
+
+  /* завсар: 7 завсар = 16% → ойролцоогоор 2.28% */
+  column-gap: 2.3%;
+  row-gap: 2.3%;
+
+  justify-content: flex-start; /* left-ээс эхлээд байрлуулна */
+  align-content: flex-start;
+  pointer-events: none;        /* click зөвхөн ном дээр */
 }
 
-/* Номын жижиг thumbnail – өргөөний 80%, өндөр нь 3:4 */
+/* Номын thumbnail – grid-н нэг “нүд” дотор */
 .book-thumb {
   position: relative;
-  width: 80%;              /* баганын 80% */
-  aspect-ratio: 3 / 4;     /* 3:4 харьцаа */
+  width: 100%;
+  padding-top: 133.33%;      /* 3:4 харьцаа */
   cursor: pointer;
   pointer-events: auto;
   transform-origin: center bottom;
@@ -80,17 +90,17 @@ body {
 .book-thumb-inner {
   position: absolute;
   inset: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.65);
   background: #111;
-  box-shadow: 0 0.9vh 2vh rgba(0,0,0,0.8);
 }
 
 .book-thumb img {
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: cover;
+  display: block;
 }
 
 .book-thumb:hover {
@@ -801,6 +811,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
