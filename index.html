@@ -6,253 +6,253 @@
   <title>Шинэ ном – New Arrivals Shelf</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+/* Фон, төвлөрүүлэлт */
 body {
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   background: #d9e6cf;
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;   /* center биш */
+  align-items: flex-start;
   justify-content: center;
-  padding: 12px 0;
+  padding: 3vh 0;
 }
 
-    /* Гол frame: 900x900 */
+/* Рам: W : H = 1 : 1.6 */
 .frame {
-  width: min(900px, 100vw - 16px); /* desktop дээр 900px, утсан дээр дэлгэцэнд багттал агшина */
-  aspect-ratio: 1 / 1.6;            /* үргэлж квадрат байлгах */
+  width: min(900px, 94vw);   /* desktop дээр ~900px, утсан дээр дэлгэцэн дотор */
+  aspect-ratio: 1 / 1.6;     /* үргэлж 1:1.6 харьцаатай */
   background: #d3e283;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+  box-shadow: 0 1.5vh 3.5vh rgba(0,0,0,0.6);
   position: relative;
 }
 
-    .wall {
-      position: absolute;
-      inset: 0;
-      padding: 40px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.30), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(255,255,255,0.24), transparent 55%),
-        linear-gradient(to bottom right, rgba(255,255,255,0.16), rgba(0,0,0,0.10));
-      overflow: hidden;
-    }
+/* Ханын фон, дотор padding-ууд нь хувиар */
+.wall {
+  position: absolute;
+  inset: 0;
+  padding: 5%;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.30), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.24), transparent 55%),
+    linear-gradient(to bottom right, rgba(255,255,255,0.16), rgba(0,0,0,0.10));
+  overflow: hidden;
+}
 
-    /* Номууд байрлах давхарга */
-    .books-layer {
-      position: absolute;
-      inset: 1vh;
-      pointer-events: none;
-    }
+/* Номууд байрлах талбай – рамны эргэн тойронд %-иар зайтай */
+.books-layer {
+  position: absolute;
+  inset: 7% 6%;     /* top/bottom 7%, left/right 6% */
+  pointer-events: none;
+}
 
-    .books-grid {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 1vh 1vh;
-      justify-items: center;
-      align-items: start;
-    }
+/* 6 багана × ойролцоогоор 7 мөр */
+.books-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  row-gap: 3.5%;       /* мөр хоорондын зай – өндрийн хувиар */
+  column-gap: 2.5%;    /* багана хоорондын зай – өргөний хувиар */
+  justify-items: center;
+  align-items: start;
+}
 
-    .book-thumb {
-      position: relative;
-      width: 12vh;
-      padding-top: 133.33%;          /* 3:4 */
-      cursor: pointer;
-      pointer-events: auto;
-      transform-origin: center bottom;
-      transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-    }
+/* Номын жижиг thumbnail – өргөөний 80%, өндөр нь 3:4 */
+.book-thumb {
+  position: relative;
+  width: 80%;              /* баганын 80% */
+  aspect-ratio: 3 / 4;     /* 3:4 харьцаа */
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: center bottom;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
 
-    .book-thumb-inner {
-      position: absolute;
-      inset: 0;
-      border-radius: 6px;
-      overflow: hidden;
-      background: #111;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.85);
-    }
+.book-thumb-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 0.9vh 2vh rgba(0,0,0,0.8);
+}
 
-    .book-thumb img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
+.book-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
 
-    .book-thumb:hover {
-      transform: translateY(-4px) scale(1.06);
-      box-shadow: 0 12vh 12vh rgba(0,0,0,0.95);
-    }
+.book-thumb:hover {
+  transform: translateY(-4%) scale(1.06);
+  box-shadow: 0 1.2vh 2.4vh rgba(0,0,0,0.95);
+}
 
-    /* === Фокус window (desktop + mobile адилхан) === */
-    .focus-overlay {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 10% 0%, rgba(255,255,255,0.25), transparent 60%),
-        radial-gradient(circle at 90% 100%, rgba(0,0,0,0.55), rgba(0,0,0,0.65));
-      backdrop-filter: blur(3px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 20;
-    }
+/* === Фокус window (томруулсан ном + info) === */
 
-    .focus-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+.focus-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255,255,255,0.25), transparent 60%),
+    radial-gradient(circle at 90% 100%, rgba(0,0,0,0.55), rgba(0,0,0,0.70));
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 20;
+}
 
-    .focus-window {
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 820px;
-      height: 520px;
-      display: flex;
-      padding: 22px 24px;
-      gap: 22px;
-      border-radius: 20px;
-      background: #ffffff;
-      box-shadow:
-        0 28px 70px rgba(0,0,0,0.85),
-        0 0 0 1px rgba(255,255,255,0.9);
-    }
+.focus-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-    .focus-book {
-      width: 360px;
-      height: 100%;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #111;
-      box-shadow: 0 22px 50px rgba(0,0,0,0.9);
-      transform-origin: center center;
-      transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
-    }
+/* focus-window: рамны өргөний ~90%, өндөр нь ~70% */
+.focus-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  padding: 3% 3.5%;
+  gap: 3%;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow:
+    0 3vh 7vh rgba(0,0,0,0.85),
+    0 0 0 1px rgba(255,255,255,0.9);
+}
 
-    .focus-book img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+/* Зураг: өргөний ~40%, info ~60% эзэлнэ */
+.focus-book {
+  flex: 0 0 40%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 2.5vh 5vh rgba(0,0,0,0.9);
+  transform-origin: center center;
+  transition: transform 0.9s cubic-bezier(0.16, 0.85, 0.33, 1);
+}
 
-    .focus-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 100%;
-    }
+.focus-book img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-    .focus-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #111827;
-    }
+/* Info тал – үлдсэн 60% */
+.focus-info {
+  flex: 1 1 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vh;
+  max-height: 100%;
+}
 
-    .focus-sub {
-      font-size: 15px;
-      color: #4b5563;
-    }
+.focus-title {
+  font-size: clamp(18px, 2.1vh, 22px);
+  font-weight: 700;
+  color: #111827;
+}
 
-    .focus-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 2px;
-    }
+.focus-sub {
+  font-size: clamp(13px, 1.7vh, 15px);
+  color: #4b5563;
+}
 
-    .meta-pill {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      color: #111827;
-    }
+.focus-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6vh;
+  margin-top: 0.2vh;
+}
 
-    .focus-desc {
-      margin-top: 6px;
-      font-size: 15px;
-      line-height: 1.55;
-      color: #111827;
-      overflow: auto;
-      white-space: pre-line;
-    }
+.meta-pill {
+  font-size: clamp(11px, 1.6vh, 13px);
+  padding: 0.4vh 1.4vh;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #111827;
+}
 
-    .focus-close {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      border: none;
-      border-radius: 999px;
-      padding: 2px 10px 4px;
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-      background: #e5e7eb;
-      color: #111827;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
-    }
+.focus-desc {
+  margin-top: 0.8vh;
+  font-size: clamp(13px, 1.8vh, 15px);
+  line-height: 1.55;
+  color: #111827;
+  overflow: auto;
+  white-space: pre-line;
+}
 
-    .focus-close:hover {
-      background: #d1d5db;
-    }
+/* Хаах X товч */
+.focus-close {
+  position: absolute;
+  top: 1.2vh;
+  right: 1.6vh;
+  border: none;
+  border-radius: 999px;
+  padding: 0.2vh 1.2vh 0.5vh;
+  font-size: 2.2vh;
+  line-height: 1;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111827;
+  box-shadow: 0 0.3vh 0.7vh rgba(0,0,0,0.25);
+}
+.focus-close:hover {
+  background: #d1d5db;
+}
 
-    /* Жижиг дэлгэц дээр grid-ээ л жаахан өөрчилнө */
-    @media (max-width: 1000px) {
-      .frame {
-        width: min(900px, 100vw - 16px);
-        height: min(900px, 100vw - 16px);
-      }
-    }
+/* === RESPONSIVE ТАЛ === */
 
-    @media (max-width: 768px) {
-      .books-grid {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 18px 12px;
-      }
-      .book-thumb {
-        width: 78px;
-      }
-      .focus-window {
-        width: calc(100vw - 32px);
-        height: 520px;
-      }
-      .focus-book {
-        width: 46%;
-      }
-    }
+/* Дэлгэц == 900px: рам бага зэрэг багасгаад grid-ийг 5 багана болгоно */
+@media (max-width: 900px) {
+  .frame {
+    width: 96vw;
+  }
+  .books-grid {
+    grid-template-columns: repeat(5, 1fr);
+    row-gap: 4%;
+    column-gap: 3%;
+  }
+}
 
-    @media (max-width: 520px) {
-      .books-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .focus-window {
-        top: 32px;
-        flex-direction: column;
-        height: calc(100vh - 80px);
-      }
-      .focus-book {
-        width: 100%;
-        height: 52%;
-      }
-      .focus-info {
-        height: 48%;
-      }
-    }
+/* Дэлгэц == 600px: 4 багана, focus-window босоогоор (зураг дээр, info доор) */
+@media (max-width: 600px) {
+  .books-grid {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 4.5%;
+    column-gap: 3%;
+  }
+
+  .focus-window {
+    flex-direction: column;
+    width: 92%;
+    height: 80%;
+  }
+
+  .focus-book {
+    flex: 0 0 55%;   /* дээд талын 55% – зураг */
+  }
+
+  .focus-info {
+    flex: 1 1 45%;   /* доод талын 45% – текст */
+  }
+}
   </style>
 </head>
 
@@ -801,6 +801,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
