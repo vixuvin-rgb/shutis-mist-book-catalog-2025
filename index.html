@@ -4,6 +4,37 @@
   <meta charset="UTF-8" />
   <title>Шинэ ном – New Arrivals Shelf</title>
   <style>
+	  .mobile-cover-wrap {
+  margin: 6px auto 4px;
+  width: 120px;
+  height: 180px;          /* 3:4 */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  background: #111;
+}
+.mobile-cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* popup-ийг арай дээш, арай намхан болгоё */
+.mobile-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 70vh;       /* 80vh байсныг 70vh болголоо */
+  background: #fdfaf5;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -16px 40px rgba(0,0,0,0.85);
+  padding: 10px 16px 16px; /* дээрийн padding-ийг бага зэрэг багасгав */
+  transform: translateY(100%);
+  transition: transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -341,14 +372,19 @@
 
   <!-- Mobile sheet -->
   <div class="mobile-backdrop" id="mBackdrop">
-    <div class="mobile-sheet" id="mSheet">
-      <div class="mobile-header">
-        <div class="mobile-title" id="mTitle"></div>
-        <button class="mobile-back" id="mBack">Буцах</button>
-      </div>
-      <div class="mobile-sub" id="mSub"></div>
-      <div class="mobile-body" id="mBody"></div>
-    </div>
+<div class="mobile-sheet" id="mSheet">
+  <div class="mobile-header">
+    <div class="mobile-title" id="mTitle"></div>
+    <button class="mobile-back" id="mBack">Буцах</button>
+  </div>
+
+  <div class="mobile-cover-wrap">
+    <img id="mCover" src="" alt="">
+  </div>
+
+  <div class="mobile-sub" id="mSub"></div>
+  <div class="mobile-body" id="mBody"></div>
+</div>
   </div>
 
   <script>
@@ -358,7 +394,7 @@
         title: "Монголын нүүдэлчдийн үндэсний уламжлалт технологи, ёс заншил",
         author: "Авдай Ч. ба бус",
         year: "2022",
-        cover: "img/book1.jpeg",
+        cover: "img/JPEG/book1.jpeg",
         pages: "478",
         isbn: "99929-82-01-2",
         purpose: "",
@@ -369,7 +405,7 @@
         title: "Машин үйлдвэрлэлийн технологи",
         author: "Оросоо Л.",
         year: "2022",
-        cover: "img/book2.jpeg",
+        cover: "img/JPEG/book2.jpeg",
         pages: "504",
         isbn: "978-9919-9900-3-9",
         purpose: "Үндсэн сурах бичиг",
@@ -379,7 +415,7 @@
         title: "Хүний хөгжил",
         author: "Авдай Ч. ба бус",
         year: "2021",
-        cover: "img/book3.jpeg",
+        cover: "img/JPEG/book3.jpeg",
         pages: "472",
         isbn: "978-9919-24-962-5",
         purpose: "Үндсэн сурах бичиг",
@@ -390,7 +426,7 @@
         title: "Автомат удирдлагын онол",
         author: "Авдай Ч. ба бус",
         year: "2021",
-        cover: "img/book4.jpeg",
+        cover: "img/JPEG/book4.jpeg",
         pages: "433",
         isbn: "978-99978-0-956-8",
         purpose: "Их сургуулийн үндсэн сурах бичиг",
@@ -401,7 +437,7 @@
         title: "Христиани – лавлах ном (Металл боловсруулалт)",
         author: "Орч. Лхагважав Н.",
         year: "2016",
-        cover: "img/book5.jpeg",
+        cover: "img/JPEG/book5.jpeg",
         pages: "736",
         isbn: "978-3-86522-822-2",
         purpose: "",
@@ -411,7 +447,7 @@
         title: "Хөдөө аж ахуй, барилгын машин механизм судлал",
         author: "Орч. Лхагважав Н",
         year: "2016",
-        cover: "img/book6.jpeg",
+        cover: "img/JPEG/book6.jpeg",
         pages: "827",
         isbn: "978-3-8085-2007-9",
         purpose: "",
@@ -421,7 +457,7 @@
         title: "Ердийн дифференциал тэгшитгэл",
         author: "Балжинням Ц. ба бус",
         year: "2020",
-        cover: "img/book7.jpeg",
+        cover: "img/JPEG/book7.jpeg",
         pages: "221",
         isbn: "978-9919-22-646-6",
         purpose: "",
@@ -431,7 +467,7 @@
         title: "Хөдөлмөрийн аюулгүй байдал, эрүүл ахуй",
         author: "Авдай Ч. ба бус",
         year: "2022",
-        cover: "img/book8.jpeg",
+        cover: "img/JPEG/book8.jpeg",
         pages: "607",
         isbn: "978-99929-51-03-6",
         purpose: "",
@@ -441,7 +477,7 @@
         title: "Металл боловсруулах ажил I, II, III",
         author: "Дагва Ж.",
         year: "2019",
-        cover: "img/book9.jpeg",
+        cover: "img/JPEG/book9.jpeg",
         pages: "192",
         isbn: "978-9919-22-708-1",
         purpose: "",
@@ -451,7 +487,7 @@
         title: "Нийтийн бодлогын шинжилгээний тоон судалгааны арга",
         author: "Ууганбаяр Т.",
         year: "2022",
-        cover: "img/book10.jpeg",
+        cover: "img/JPEG/book10.jpeg",
         pages: "136",
         isbn: "978-9919-24-980-9",
         purpose: "",
@@ -462,7 +498,7 @@
   title: "Шинжлэх ухааны танин мэдэхүйн арга судлал",
   author: "Өлзийхуяг Б., Намсрай Т.",
   year: "2022",
-  cover: "img/book11.jpeg",
+  cover: "img/JPEG/book11.jpeg",
   pages: "333",
   isbn: "978-9919-27-655-3",
   purpose: "",
@@ -472,7 +508,7 @@
   title: "СКД9с ба СКД4в серийн илчит тэрэгний ашиглалт, засвар үйлчилгээний технологийн заавар",
   author: "Орч. Сүхээ Ё. ба бус",
   year: "2022",
-  cover: "img/book12.jpeg",
+  cover: "img/JPEG/book12.jpeg",
   pages: "911",
   isbn: "978-9919-27-337-8",
   purpose: "",
@@ -482,7 +518,7 @@
   title: "Чилхаажавын Авдайгийн амьдрал, ажил, хөдөлмөрийн зам мөр",
   author: "Авдай Ч.",
   year: "2022",
-  cover: "img/book13.jpeg",
+  cover: "img/JPEG/book13.jpeg",
   pages: "334",
   isbn: "",
   purpose: "",
@@ -492,7 +528,7 @@
   title: "Тээврийн салбарын мэдээллийн систем",
   author: "С. Ариунбаяр ба бус",
   year: "2021",
-  cover: "img/book14.jpeg",
+  cover: "img/JPEG/book14.jpeg",
   pages: "86",
   isbn: "978-9919-27-005-6",
   purpose: "",
@@ -502,7 +538,7 @@
   title: "Механик боловсруулалт (Программын удирдлагатай фрезер)",
   author: "Г. Оюунбат ба бус",
   year: "2025",
-  cover: "img/book15.jpeg",
+  cover: "img/JPEG/book15.jpeg",
   pages: "73",
   isbn: "978-9919-0-5002-3",
   purpose: "",
@@ -512,7 +548,7 @@
   title: "Механик боловсруулалт (Гар удирдлагатай токарь, фрезер)",
   author: "Г. Оюунбат ба бус",
   year: "2025",
-  cover: "img/book16.jpeg",
+  cover: "img/JPEG/book16.jpeg",
   pages: "88",
   isbn: "978-9919-0-4997-3",
   purpose: "",
@@ -522,7 +558,7 @@
   title: "Механик боловсруулалт (Программын удирдлагатай токарь–2)",
   author: "Г. Оюунбат ба бус",
   year: "2025",
-  cover: "img/book17.jpeg",
+  cover: "img/JPEG/book17.jpeg",
   pages: "99",
   isbn: "978-9919-0-5001-6",
   purpose: "",
@@ -532,7 +568,7 @@
   title: "Механик боловсруулалт (Программын удирдлагатай токарь–1)",
   author: "Г.Оюунбат ба бус",
   year: "2025",
-  cover: "img/book18.jpeg",
+  cover: "img/JPEG/book18.jpeg",
   pages: "169",
   isbn: "978-9919-0-5000-9",
   purpose: "",
@@ -542,7 +578,7 @@
   title: "Цахилгаан хангамж түгээлтийн үндэс – 1",
   author: "З. Цэрэндорж, Ц. Эрдэнэтуяа",
   year: "2023",
-  cover: "img/book19.jpeg",
+  cover: "img/JPEG/book19.jpeg",
   pages: "394",
   isbn: "978-99978-0-681-9",
   purpose: "",
@@ -552,7 +588,7 @@
   title: "Цахилгаан хангамж түгээлтийн үндэс – 2",
   author: "З. Цэрэндорж, Ц. Эрдэнэтуяа",
   year: "2022",
-  cover: "img/book20.jpeg",
+  cover: "img/JPEG/book20.jpeg",
   pages: "424",
   isbn: "978-99978-0-681-9",
   purpose: "",
@@ -562,7 +598,7 @@
   title: "Хиймэл оюун ухаан",
   author: "Б. Мөнххүж, Д. Бадарч",
   year: "2024",
-  cover: "img/book21.jpeg",
+  cover: "img/JPEG/book21.jpeg",
   pages: "162",
   isbn: "978-9919-0-4309-4",
   purpose: "",
@@ -572,7 +608,7 @@
   title: "Friend’s – Хамтдаа англи хэлээ сайжруулцгаая – 1",
   author: "Ц. Одончимэг",
   year: "2024",
-  cover: "img/book22.jpeg",
+  cover: "img/JPEG/book22.jpeg",
   pages: "164",
   isbn: "978-9919-0-2298-3",
   purpose: "",
@@ -582,7 +618,7 @@
   title: "Friend’s – Хамтдаа англи хэлээ сайжруулцгаая – 2",
   author: "Ц. Одончимэг",
   year: "2024",
-  cover: "img/book23.jpeg",
+  cover: "img/JPEG/book23.jpeg",
   pages: "204",
   isbn: "978-9919-0-3382-8",
   purpose: "",
@@ -592,7 +628,7 @@
   title: "Мехатроникийн үндэс",
   author: "Б. Сэрвүүд, Ц. Бат-Эрдэнэ",
   year: "2025",
-  cover: "img/book24.jpeg",
+  cover: "img/JPEG/book24.jpeg",
   pages: "333",
   isbn: "",
   purpose: "",
@@ -602,7 +638,7 @@
   title: "Тээврийн менежмент",
   author: "Б. Асралт ба бус",
   year: "2025",
-  cover: "img/book25.jpeg",
+  cover: "img/JPEG/book25.jpeg",
   pages: "151",
   isbn: "978-9919-0-4749-8",
   purpose: "",
@@ -612,7 +648,7 @@
   title: "Өөрийгөө бүтээ",
   author: "Ч. Алимаа",
   year: "2022",
-  cover: "img/book26.jpeg",
+  cover: "img/JPEG/book26.jpeg",
   pages: "421",
   isbn: "978-9919-9695-2-3",
   purpose: "",
@@ -622,7 +658,7 @@
   title: "Түүхийн жимээр (Дорнод аймаг) – 5",
   author: "М. Жавзансүрэн",
   year: "2023",
-  cover: "img/book27.jpeg",
+  cover: "img/JPEG/book27.jpeg",
   pages: "296",
   isbn: "978-9919-0-0955-7",
   purpose: "",
@@ -632,7 +668,7 @@
   title: "Түүхийн жимээр (Өмнөговь аймаг) – 6",
   author: "М. Жавзансүрэн",
   year: "2023",
-  cover: "img/book28.jpeg",
+  cover: "img/JPEG/book28.jpeg",
   pages: "599",
   isbn: "978-9919-0-1820-7",
   purpose: "",
@@ -642,7 +678,7 @@
   title: "Монгол бичгийн зөв бичих дүрэм, арга зүй, хэрэглээ",
   author: "Чой. Цэдэнбал",
   year: "2023",
-  cover: "img/book29.jpeg",
+  cover: "img/JPEG/book29.jpeg",
   pages: "392",
   isbn: "978-9919-0-1977-8",
   purpose: "",
@@ -652,7 +688,7 @@
   title: "Зурагтай үлгэрүүд – Хуулан бичиж, уншиж сурах ном",
   author: "Чой. Цэдэнбал",
   year: "2019",
-  cover: "img/book30.jpeg",
+  cover: "img/JPEG/book30.jpeg",
   pages: "127",
   isbn: "978-9919-21-723-5",
   purpose: "",
@@ -662,7 +698,7 @@
   title: "Монгол хичээнгүй бичиг заах арга",
   author: "Чой. Цэдэнбал",
   year: "2021",
-  cover: "img/book31.jpeg",
+  cover: "img/JPEG/book31.jpeg",
   pages: "192",
   isbn: "978-9919-25-926-6",
   purpose: "",
@@ -672,7 +708,7 @@
   title: "Монгол хичээнгүй бичиг",
   author: "Чой. Цэдэнбал",
   year: "2018",
-  cover: "img/book32.jpeg",
+  cover: "img/JPEG/book32.jpeg",
   pages: "280",
   isbn: "978-999-78-290-09",
   purpose: "",
@@ -682,7 +718,7 @@
   title: "Исламын ертөнц ба Монголчууд",
   author: "А. Энхбат",
   year: "2024",
-  cover: "img/book33.jpeg",
+  cover: "img/JPEG/book33.jpeg",
   pages: "288",
   isbn: "978-9919-0-2833-6",
   purpose: "",
@@ -692,7 +728,7 @@
   title: "Замын машин",
   author: "Х. Чулуунбаатар, Я. Рэнчинванжил",
   year: "2024",
-  cover: "img/book34.jpeg",
+  cover: "img/JPEG/book34.jpeg",
   pages: "464",
   isbn: "978-9919-0-2600-4",
   purpose: "",
@@ -702,7 +738,7 @@
   title: "Тоон системийн удирдлага – I, II",
   author: "Б. Сэр-Од, Б. БатЭрдэнэ",
   year: "2024",
-  cover: "img/book35.jpeg",
+  cover: "img/JPEG/book35.jpeg",
   pages: "240",
   isbn: "978-9919-0-2529-8",
   purpose: "",
@@ -712,7 +748,7 @@
   title: "Худалдааны маркетинг",
   author: "Б. Болормаа",
   year: "2023",
-  cover: "img/book36.jpeg",
+  cover: "img/JPEG/book36.jpeg",
   pages: "303",
   isbn: "978-9919-0-1779-8",
   purpose: "",
@@ -722,7 +758,7 @@
   title: "Шугаман алгебр 1",
   author: "В. Өлзийбаяр ба бус",
   year: "2019",
-  cover: "img/book37.jpeg",
+  cover: "img/JPEG/book37.jpeg",
   pages: "256",
   isbn: "978-99978-2-430-1",
   purpose: "",
@@ -732,7 +768,7 @@
   title: "Өргөн тээвэрлэх машин",
   author: "Б. Сэрвүүд",
   year: "2024",
-  cover: "img/book38.jpeg",
+  cover: "img/JPEG/book38.jpeg",
   pages: "320",
   isbn: "",
   purpose: "",
@@ -742,7 +778,7 @@
   title: "Өргөн тээвэрлэх машин",
   author: "Б. Сэрвүүд",
   year: "2023",
-  cover: "img/book39.jpeg",
+  cover: "img/JPEG/book39.jpeg",
   pages: "248",
   isbn: "",
   purpose: "",
@@ -752,7 +788,7 @@
   title: "Хий шингэний хөтлүүр",
   author: "Б. Сэрвүүд",
   year: "2024",
-  cover: "img/book40.jpeg",
+  cover: "img/JPEG/book40.jpeg",
   pages: "280",
   isbn: "",
   purpose: "",
@@ -778,6 +814,7 @@
     const mSub      = document.getElementById("mSub");
     const mBody     = document.getElementById("mBody");
     const mBack     = document.getElementById("mBack");
+	const mCover   = document.getElementById("mCover");
 
     let isMobile = window.matchMedia("(max-width: 768px)").matches;
     window.addEventListener("resize", () => {
@@ -865,24 +902,31 @@
     });
 
     // === Mobile bottom sheet ===
-    function openMobileSheet(idx) {
-      const b = books[idx];
-      if (!b) return;
-      mTitle.textContent = b.title || "";
-      mSub.textContent = [b.author, b.year].filter(Boolean).join(" · ");
+const mCover = document.getElementById("mCover");  // дээр нь нэг мөр нэмэхээ бүү мартаарай
 
-      let meta = "";
-      if (b.pages) meta += "Хуудас: " + b.pages + "\n";
-      if (b.isbn) meta += "ISBN: " + b.isbn + "\n";
-      if (b.purpose) meta += b.purpose + "\n";
+function openMobileSheet(idx) {
+  const b = books[idx];
+  if (!b) return;
 
-      mBody.textContent = (meta ? meta + "\n" : "") + (b.description || "");
+  mTitle.textContent = b.title || "";
+  mSub.textContent = [b.author, b.year].filter(Boolean).join(" · ");
 
-      mBackdrop.classList.add("show");
-      requestAnimationFrame(() => {
-        mSheet.classList.add("show");
-      });
-    }
+  // cover зураг
+  mCover.src = b.cover || "";
+  mCover.alt = b.title || "";
+
+  let meta = "";
+  if (b.pages) meta += "Хуудас: " + b.pages + "\n";
+  if (b.isbn) meta += "ISBN: " + b.isbn + "\n";
+  if (b.purpose) meta += b.purpose + "\n";
+
+  mBody.textContent = (meta ? meta + "\n" : "") + (b.description || "");
+
+  mBackdrop.classList.add("show");
+  requestAnimationFrame(() => {
+    mSheet.classList.add("show");
+  });
+}
 
     function closeMobileSheet() {
       mSheet.classList.remove("show");
@@ -898,3 +942,4 @@
   </script>
 </body>
 </html>
+
